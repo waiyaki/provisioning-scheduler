@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "waiyaki",
+    "password": null,
+    "database": "prov_scheduler_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "waiyaki",
+    "password": null,
+    "database": "prov_scheduler_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "prov_scheduler_prod",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
