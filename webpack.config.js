@@ -11,8 +11,6 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 const config = {
   devtool: 'eval-source-map',
   entry: [
-    'webpack-hot-middleware/client',
-    'react-hot-loader/patch',
     './client/index.js'
   ],
   output: {
@@ -57,6 +55,11 @@ if (process.env.NODE_ENV === 'production') {
     })
   ];
 } else {
+  config.entry = [
+    'webpack-hot-middleware/client',
+    'react-hot-loader/patch',
+    ...config.entry
+  ];
   config.plugins = [
     ...config.plugins,
     new webpack.HotModuleReplacementPlugin(),
