@@ -1,4 +1,4 @@
-module.exports = (req, res, next, { requiredFields }) => {
+module.exports = (req, res, next, { requiredFields = [] }) => {
   const errors = {};
   for (const field of requiredFields) {
     if (!req.body[field]) {
