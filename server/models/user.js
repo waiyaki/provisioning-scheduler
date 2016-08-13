@@ -34,8 +34,17 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'users',
     classMethods: {
+      findByUsernameOrEmail(value) {
+        return this.find({
+          where: {
+            $or: [{ username: value }, { email: value }]
+          }
+        });
+      },
+
       comparePassword: (password, hash) => bcrypt.compareSync(password, hash)
     },
+
     instanceMethods: {
       toJSON() {
         const values = this.get({ clone: true });
@@ -43,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         return values;
       }
     },
+
     hooks: {
       afterValidate: (user) => {
         user.password = bcrypt.hashSync(user.password);

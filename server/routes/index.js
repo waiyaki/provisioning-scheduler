@@ -1,5 +1,7 @@
 const { userController } = require('../controllers');
-const { requireFields, requireEmailWithDomains } = require('../middleware');
+const {
+  requireFields, requireEmailWithDomains, checkUserExistence
+} = require('../middleware');
 
 const disallowMethod = (req, res) => res.status(405).send({
   message: 'Method Not Allowed.'
@@ -25,6 +27,7 @@ module.exports = (router) => {
         ]
       }),
       requireEmailWithDomains,
+      checkUserExistence,
       userController.create
     )
     .all(disallowMethod);
