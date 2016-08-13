@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const PendingUser = sequelize.define('PendingUser', {
     firstName: {
       type: DataTypes.STRING(64),
       allowNull: false
@@ -30,16 +30,30 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING(60),
       allowNull: false
+    },
+    isPending: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    verificationToken: {
+      type: DataTypes.STRING(36)
     }
   }, {
-    tableName: 'users',
+    tableName: 'pending_users',
     classMethods: {
-      comparePassword: (password, hash) => bcrypt.compareSync(password, hash)
+      findByToken(token) {
+        return this.find({
+          where: {
+            verificationToken: token
+          }
+        });
+      }
     },
     instanceMethods: {
       toJSON() {
         const values = this.get({ clone: true });
         delete values.password;
+        delete values.verificationToken;
         return values;
       }
     },
@@ -50,5 +64,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  return User;
+  return PendingUser;
 };

@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
+const dotenv = require('dotenv');
 
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -14,6 +15,11 @@ const publicPath = path.resolve(__dirname, './client/dist');
 const app = express();
 const router = express.Router(); // eslint-disable-line new-cap
 
+const env = process.env.NODE_ENV;
+if (env !== 'production') {
+  dotenv.load();
+}
+
 // Log here so that all requests are logged.
 app.use(logger('dev'));
 
@@ -23,7 +29,7 @@ app.use(express.static(publicPath));
 app.use(require('./server/routes')(router));
 
 // Configure webpack hot reloading
-if (process.env.NODE_ENV === 'development') {
+if (env === 'development') {
   const compiler = webpack(webpackConfig);
   app.use(webpackDevMiddleware(compiler, {
     noInfo: true,

@@ -30,6 +30,11 @@ module.exports = {
 
       return this.send(res, errors, status);
     }
-    return this.send(res, error, status);
+
+    // TODO: Need better error handling for other errors. This swallows the
+    // original error. 😕 -- Could use logging here though.
+    return this.send(res, {
+      error: 'A server error occured.'
+    }, 500);
   }
 };

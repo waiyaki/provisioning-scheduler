@@ -1,11 +1,19 @@
 const { userController } = require('../controllers');
 const { requireFields, requireEmailWithDomains } = require('../middleware');
 
+const disallowMethod = (req, res) => res.status(405).send({
+  message: 'Method Not Allowed.'
+});
+
 module.exports = (router) => {
   router.route('/api')
     .get((req, res) => res.send({
       message: 'Welcome to the API!'
     }));
+
+  router.route('/api/users/verifyemail/:verificationToken')
+    .get(userController.verifyEmail)
+    .all(disallowMethod);
 
   router.route('/api/users')
     .post(
@@ -19,9 +27,7 @@ module.exports = (router) => {
       requireEmailWithDomains,
       userController.create
     )
-    .all((req, res) => res.status(405).send({
-      message: 'Method Not Allowed.'
-    }));
+    .all(disallowMethod);
 
   return router;
 };
