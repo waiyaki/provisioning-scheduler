@@ -49,12 +49,24 @@ module.exports = (sequelize, DataTypes) => {
         });
       },
 
-      findByToken(token) {
+      findByKey(key, value) {
         return this.find({
           where: {
-            verificationToken: token
+            [key]: value
           }
         });
+      },
+
+      findByEmail(email) {
+        return this.findByKey('email', email);
+      },
+
+      findByUsername(username) {
+        return this.findByKey('username', username);
+      },
+
+      findByToken(token) {
+        return this.findByKey('verificationToken', token);
       }
     },
 

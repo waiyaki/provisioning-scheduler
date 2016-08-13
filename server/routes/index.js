@@ -13,7 +13,23 @@ module.exports = (router) => {
       message: 'Welcome to the API!'
     }));
 
-  router.route('/api/users/verifyemail/:verificationToken')
+  /**
+   * Resend the verification email to the user.
+   *
+   * This route has to be before the verification route else it'll be
+   * interpreted by Express as a verification request.
+   */
+  router.route('/api/users/verify-email/resend')
+    .put(
+      (req, res, next) => requireFields(req, res, next, {
+        requiredFields: ['email']
+      }),
+      requireEmailWithDomains,
+      userController.resendVerificationEmail
+    )
+    .all(disallowMethod);
+
+  router.route('/api/users/verify-email/:verificationToken/verify')
     .get(userController.verifyEmail)
     .all(disallowMethod);
 

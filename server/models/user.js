@@ -34,6 +34,22 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'users',
     classMethods: {
+      findByKey(key, value) {
+        return this.find({
+          where: {
+            [key]: value
+          }
+        });
+      },
+
+      findByEmail(email) {
+        return this.findByKey('email', email);
+      },
+
+      findByUsername(username) {
+        return this.findByKey('username', username);
+      },
+
       findByUsernameOrEmail(value) {
         return this.find({
           where: {

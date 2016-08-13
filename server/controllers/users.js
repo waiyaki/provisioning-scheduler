@@ -4,6 +4,18 @@ const logger = require('logfilename')(__filename);
 const { PendingUser, User } = require('../models');
 const { handleErrors, sendEmail } = require('../utils');
 
+const sendEmailWrapper = (user, type) => {
+  sendEmail(user, type)
+    .then(
+      () => {
+        logger.info('Email sent');
+      },
+      () => {
+        logger.error('Unable to send email');
+      }
+    );
+};
+
 function create(req, res) {
   return PendingUser.create({
     firstName: req.body.firstName,
@@ -15,14 +27,7 @@ function create(req, res) {
   }).then(
     user => {
       logger.info('User created: ', user.toJSON());
-      sendEmail(user, 'user.registering').then(
-        () => {
-          logger.info('Email sent.');
-        },
-        () => {
-          logger.error('Unable to send email.');
-        }
-      );
+      sendEmailWrapper(user, 'user.registering');
       return res.status(201).send(Object.assign({}, user.toJSON(), {
         sentEmail: true
       }));
@@ -41,7 +46,7 @@ function verifyEmail(req, res) {
         if (!user) {
           logger.warn('User token %s not found.', token);
           return handleErrors.send(res, {
-            message: 'Invalid token. Please try requesting for another token.'
+            message: 'This token is invalid. Please try resending the verification email.'
           });
         }
         return User
@@ -80,7 +85,48 @@ function verifyEmail(req, res) {
     );
 }
 
+function resendVerificationEmail(req, res) {
+  const email = req.body.email;
+  logger.info('Processing request to resend verification email to %s', email);
+
+  const resendEmail = (response, user) => {
+    logger.info('Resending email to %s', user.email);
+    sendEmailWrapper(user, 'user.registering');
+    return response.status(200).send({
+      message: 'Verification email successfully resent.'
+    });
+  };
+
+  return PendingUser.findByEmail(req.body.email)
+    .then(
+      user => {
+        if (!user) {
+          // If the user is not Pending, check whether they already verified.
+          return User.findByEmail(email)
+            .then(
+              verifiedUser => {
+                if (!verifiedUser) {
+                  return handleErrors.send(res, {
+                    message: 'This user does not exist. Try registering instead.'
+                  });
+                }
+
+                logger.info('%s is already verified.', email);
+                return res.status(200).send({
+                  message: 'Your account is already verified. You can log in.'
+                });
+              },
+              error => handleErrors.resolve(res, error)
+            );
+        }
+        return resendEmail(res, user);
+      },
+      error => handleErrors.resolve(res, error)
+    );
+}
+
 module.exports = {
   create,
-  verifyEmail
+  verifyEmail,
+  resendVerificationEmail
 };
