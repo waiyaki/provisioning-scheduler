@@ -17,6 +17,7 @@ const sendEmailWrapper = (user, type) => {
 };
 
 function create(req, res) {
+  logger.info('Creating PendingUser: ', _.omit(req.body, 'password'));
   return PendingUser.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -29,10 +30,14 @@ function create(req, res) {
       logger.info('User created: ', user.toJSON());
       sendEmailWrapper(user, 'user.registering');
       return res.status(201).send(Object.assign({}, user.toJSON(), {
-        sentEmail: true
+        sentEmail: true,
+        token: user.generateToken()
       }));
     },
-    error => handleErrors.resolve(res, error)
+    error => {
+      logger.error('Error creating pending user: ', error);
+      return handleErrors.resolve(res, error);
+    }
   );
 }
 
@@ -51,7 +56,7 @@ function verifyEmail(req, res) {
         }
         return User
           .create(
-            _.omit(user.dataValues, ['token', 'isPending'])
+            _.omit(user.dataValues, ['verificationToken', 'isPending'])
           )
           .then(
             verifiedUser => {
@@ -130,8 +135,23 @@ function resendVerificationEmail(req, res) {
     );
 }
 
+function login(req, res) {
+  if (!req.user.comparePassword(req.body.password)) {
+    return handleErrors.send(res, {
+      message: 'Invalid username/password combination.'
+    }, 401);
+  }
+
+  return res.status(200).send(
+    Object.assign({}, req.user.toJSON(), {
+      token: req.user.generateToken()
+    })
+  );
+}
+
 module.exports = {
   create,
+  login,
   verifyEmail,
   resendVerificationEmail
 };

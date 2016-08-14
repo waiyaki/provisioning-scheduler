@@ -1,6 +1,7 @@
 const { userController } = require('../controllers');
 const {
-  requireFields, requireEmailWithDomains, checkUserExistence
+  requireFields, requireEmailWithDomains, checkUserExistence,
+  allowBasedOnUserPresence
 } = require('../middleware');
 
 const disallowMethod = (req, res) => res.status(405).send({
@@ -33,6 +34,18 @@ module.exports = (router) => {
     .get(userController.verifyEmail)
     .all(disallowMethod);
 
+  router.route('/api/users/login')
+    .post(
+      (req, res, next) => requireFields(req, res, next, {
+        requiredFields: ['email|username', 'password']
+      }),
+      requireEmailWithDomains,
+      checkUserExistence,
+      allowBasedOnUserPresence,
+      userController.login
+    )
+    .all(disallowMethod);
+
   router.route('/api/users')
     .post(
       // Intercept the request in a middleware and validate that we have all
@@ -44,6 +57,7 @@ module.exports = (router) => {
       }),
       requireEmailWithDomains,
       checkUserExistence,
+      (req, res, next) => allowBasedOnUserPresence(req, res, next, false),
       userController.create
     )
     .all(disallowMethod);

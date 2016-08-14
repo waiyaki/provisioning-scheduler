@@ -1,5 +1,9 @@
 /* eslint-disable new-cap */
 const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jsonwebtoken');
+const logger = require('logfilename')(__filename);
+
+const config = require('../config');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -56,12 +60,25 @@ module.exports = (sequelize, DataTypes) => {
             $or: [{ username: value }, { email: value }]
           }
         });
-      },
-
-      comparePassword: (password, hash) => bcrypt.compareSync(password, hash)
+      }
     },
 
     instanceMethods: {
+      comparePassword(password) {
+        return bcrypt.compareSync(password, this.password);
+      },
+
+      generateToken() {
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 7);
+
+        return jwt.sign({
+          id: this.id,
+          username: this.username,
+          exp: parseInt(expiry.getTime() / 1000, 10)
+        }, config.SECRET_KEY);
+      },
+
       toJSON() {
         const values = this.get({ clone: true });
         delete values.password;
@@ -70,8 +87,11 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     hooks: {
-      afterValidate: (user) => {
-        user.password = bcrypt.hashSync(user.password);
+      beforeUpdate(instance) {
+        if (instance.changed('password')) {
+          logger.info('Hashing password for %s', instance.username);
+          instance.set('password', bcrypt.hashSync(instance.get('password')));
+        }
       }
     }
   });

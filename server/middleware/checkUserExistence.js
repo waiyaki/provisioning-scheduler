@@ -3,7 +3,9 @@ const logger = require('logfilename')(__filename);
 const { User, PendingUser } = require('../models');
 
 module.exports = (req, res, next) => {
-  const username = req.body.username;
+  const username = req.body.username || req.body.email;
+  const usernameField = req.body.username ? 'username' : 'email';
+  req.usernameField = usernameField;
   logger.info('Checking for existence of user: ', username);
   PendingUser
     .findByUsernameOrEmail(username)
@@ -11,22 +13,24 @@ module.exports = (req, res, next) => {
       user => {
         if (!user) {
           return User
-            .findByUsernameOrEmail(req.body.username)
-            .then(verifiedUser => {
-              if (!verifiedUser) {
-                logger.info('User %s does not exist. Moving on...', username);
+            .findByUsernameOrEmail(username)
+            .then(
+              verifiedUser => {
+                if (!verifiedUser) {
+                  logger.warn('User %s does not exist. Moving on...', username);
+                  return next();
+                }
+                logger.info('User %s exists (verified).', username);
+                req.user = verifiedUser;
                 return next();
-              }
-              logger.warn('User %s exists. Refusing to create.', username);
-              return res.status(409).send({
-                message: 'This user exists.'
-              });
-            });
+              },
+              error => next(error)
+            );
         }
-        logger.warn('User %s exists. Refusing to create.', username);
-        return res.status(409).send({
-          message: 'This user exists.'
-        });
-      }
+        logger.info('User %s exists (unverified).', username);
+        req.user = user;
+        return next();
+      },
+      error => next(error)
     );
 };

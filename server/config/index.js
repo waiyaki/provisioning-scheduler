@@ -1,7 +1,8 @@
 const _ = require('lodash');
 
 const baseConfig = {
-  hostAPIUrl: process.env.HOST_URL || 'http://localhost:8000/api'
+  hostAPIUrl: process.env.HOST_URL || 'http://localhost:8000/api',
+  SECRET_KEY: process.env.SECRET_KEY
 };
 
 const mailConfig = {
