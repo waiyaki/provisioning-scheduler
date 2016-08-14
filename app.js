@@ -13,7 +13,6 @@ const webpackConfig = require('./webpack.config');
 const publicPath = path.resolve(__dirname, './client/dist');
 
 const app = express();
-const router = express.Router(); // eslint-disable-line new-cap
 
 const env = process.env.NODE_ENV;
 if (env !== 'production') {
@@ -26,7 +25,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(publicPath));
-app.use(require('./server/routes')(router));
+require('./server/routes')(app); // require application routes.
 
 // Configure webpack hot reloading
 if (env === 'development') {
