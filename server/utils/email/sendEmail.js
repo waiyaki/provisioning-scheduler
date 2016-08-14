@@ -63,18 +63,20 @@ function sendEmail(user, type) {
 
         // Temp credentials as I wait for Mailgun to resolve some issues
         // with my test account.
-        const temporaryMailerConfig = {
-          smtp: {
-            service: 'Gmail',
-            auth: {
-              user: process.env.GMAIL_USER,
-              pass: process.env.GMAIL_APP_PASSWORD
-            }
-          }
-        };
-
-        config.mail.smtp = temporaryMailerConfig.smtp;
-        logger.info('Configuring mailer: ', config.mail.smtp);
+        // const temporaryMailerConfig = _
+        //   smtp: {
+        //     service: 'Gmail',
+        //     auth: {
+        //       user: process.env.GMAIL_USER,
+        //       pass: process.env.GMAIL_APP_PASSWORD
+        //     }
+        //   }
+        // };
+        //
+        // config.mail.smtp = temporaryMailerConfig.smtp;
+        logger.info('Configuring mailer: ', _.omit(
+          config.mail.smtp, 'auth.pass')
+        );
         const transporter = nodemailer.createTransport(config.mail.smtp);
 
         logger.info('sendMail: ', _.omit(mailOptions, 'html'));
