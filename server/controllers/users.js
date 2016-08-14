@@ -70,6 +70,11 @@ function verifyEmail(req, res) {
                 }
               }).then(() => {
                 logger.info('Destroyed PendingUser: ', user.toJSON());
+              }, error => {
+                logger.error(
+                  'Error while destroying PendingUser %s: ',
+                  user.toJSON(), error
+                );
               });
             },
             error => {
