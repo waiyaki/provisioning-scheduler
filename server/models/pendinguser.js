@@ -6,7 +6,7 @@ const logger = require('logfilename')(__filename);
 const config = require('../config');
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const PendingUser = sequelize.define('PendingUser', {
     firstName: {
       type: DataTypes.STRING(64),
       allowNull: false
@@ -34,10 +34,25 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING(60),
       allowNull: false
+    },
+    isPending: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    verificationToken: {
+      type: DataTypes.STRING(36)
     }
   }, {
-    tableName: 'users',
+    tableName: 'pending_users',
     classMethods: {
+      findByUsernameOrEmail(value) {
+        return this.find({
+          where: {
+            $or: [{ username: value }, { email: value }]
+          }
+        });
+      },
+
       findByKey(key, value) {
         return this.find({
           where: {
@@ -54,12 +69,8 @@ module.exports = (sequelize, DataTypes) => {
         return this.findByKey('username', username);
       },
 
-      findByUsernameOrEmail(value) {
-        return this.find({
-          where: {
-            $or: [{ username: value }, { email: value }]
-          }
-        });
+      findByToken(token) {
+        return this.findByKey('verificationToken', token);
       }
     },
 
@@ -82,12 +93,13 @@ module.exports = (sequelize, DataTypes) => {
       toJSON() {
         const values = this.get({ clone: true });
         delete values.password;
+        delete values.verificationToken;
         return values;
       }
     },
 
     hooks: {
-      beforeUpdate(instance) {
+      afterValidate(instance) {
         if (instance.changed('password')) {
           logger.info('Hashing password for %s', instance.username);
           instance.set('password', bcrypt.hashSync(instance.get('password')));
@@ -96,5 +108,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  return User;
+  return PendingUser;
 };
