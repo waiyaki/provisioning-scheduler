@@ -1,7 +1,7 @@
-const initialState = { name: 'Provisioning Scheduler' };
-export default function (state = initialState, action) {
-  switch (action.type) {
-    default:
-      return state;
-  }
-}
+import { combineReducers } from 'redux';
+
+import authReducer from './authReducer';
+
+export default combineReducers({
+  auth: authReducer
+});

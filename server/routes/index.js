@@ -13,7 +13,7 @@ module.exports = (app) => {
   app.use('/api/users', userRoutes.publicUserRoutes);
 
   // From here on, require that users have an authentication token.
-  app.use('*', authenticateRequests);
+  app.use('/api/*', authenticateRequests);
   app.use('/api/users', userRoutes.protectedUserRoutes);
   app.use(
     '/api/scheduled-tasks',

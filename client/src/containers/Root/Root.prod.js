@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 
-import HelloWorld from '../HelloWorld';
+import Routes from '../../routes';
 
 function Root({ store }) {
   return (
     <Provider store={store}>
-      <HelloWorld />
+      <Routes />
     </Provider>
   );
 }

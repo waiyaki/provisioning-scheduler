@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 
-import DevTools from '../DevTools';
-import HelloWorld from '../HelloWorld';
+import Routes from '../../routes';
+import DevTools from '../../containers/DevTools';
 
 function Root(props) {
   return (
     <Provider store={props.store}>
       <div>
-        <HelloWorld />
+        <Routes />
         <DevTools />
       </div>
     </Provider>
