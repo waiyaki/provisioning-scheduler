@@ -29,6 +29,13 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
+    },
+    time: {
+      type: DataTypes.TIME,
+      allowNull: false,
+      get() {
+        return `${this.getDataValue('time')}hrs`;
+      }
     }
   };
 
