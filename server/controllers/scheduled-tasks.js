@@ -1,7 +1,7 @@
 const logger = require('logfilename')(__filename);
 const moment = require('moment');
 
-const { ScheduledTask } = require('../models');
+const { ScheduledTask, User } = require('../models');
 const { handleErrors } = require('../utils');
 
 function create(req, res) {
@@ -26,7 +26,26 @@ function create(req, res) {
     );
 }
 
+function list(req, res) {
+  logger.info('Listing all available scheduledTasks...');
+  return ScheduledTask
+    .findAll({
+      include: {
+        model: User,
+        as: 'user',
+        attributes: ['id', 'firstName', 'lastName', 'username', 'email']
+      }
+    })
+    .then(
+      tasks => res.status(200).send(tasks),
+      error => {
+        logger.error('Error while fetching all scheduled tasks', error);
+        return handleErrors.resolve(res, error);
+      }
+    );
+}
 
 module.exports = {
-  create
+  create,
+  list
 };

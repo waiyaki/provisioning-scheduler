@@ -52,7 +52,8 @@ module.exports = (sequelize, DataTypes) => {
         associate: (models) => {
           ScheduledTask.belongsTo(models.User, {
             foreignKey: 'userId',
-            onDelete: 'CASCADE'
+            onDelete: 'CASCADE',
+            as: 'user'
           });
         }
       }

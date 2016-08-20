@@ -16,6 +16,7 @@ protectedScheduledTasksRoutes.route('/')
     (req, res, next) => requireFields(req, res, next, { requiredFields }),
     scheduledTasksController.create
   )
+  .get(scheduledTasksController.list)
   .all(disallowMethod);
 
 module.exports = protectedScheduledTasksRoutes;
