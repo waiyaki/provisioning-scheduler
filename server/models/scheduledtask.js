@@ -1,6 +1,6 @@
 const { PhoneNumberUtil } = require('google-libphonenumber');
+const scheduledTasksSchemaFunc = require('./schemas/scheduled-tasks-schema');
 const phoneUtil = PhoneNumberUtil.getInstance();
-
 const validatePhoneNumber = (number) => {
   const parsedNumber = phoneUtil.parseAndKeepRawInput(number, 'KE');
 
@@ -8,14 +8,7 @@ const validatePhoneNumber = (number) => {
 };
 
 module.exports = (sequelize, DataTypes) => {
-  const ScheduledTask = sequelize.define('ScheduledTask', {
-    partner: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    engineer: {
-      type: DataTypes.STRING
-    },
+  const overrides = {
     engineersPhoneNumber: {
       type: DataTypes.STRING,
       validate: {
@@ -25,14 +18,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
-    },
-    siteName: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    contactPerson: {
-      type: DataTypes.STRING,
-      allowNull: false
     },
     contactPersonsPhoneNumber: {
       type: DataTypes.STRING,
@@ -44,42 +29,28 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
-    },
-    town: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    circuitId: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    activity: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
-    medium: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    time: {
-      type: DataTypes.TIME,
-      allowNull: false
-    },
-    projectManager: {
-      type: DataTypes.STRING,
-      allowNull: false
     }
-  }, {
-    tableName: 'scheduled_tasks',
-    classMethods: {
-      associate: (models) => {
-        ScheduledTask.belongsTo(models.User, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE'
-        });
+  };
+
+  const scheduledTasksSchema = Object.assign(
+    {}, scheduledTasksSchemaFunc(DataTypes), overrides
+  );
+
+  const ScheduledTask = sequelize.define(
+    'ScheduledTask',
+    scheduledTasksSchema,
+    {
+      tableName: 'scheduled_tasks',
+      classMethods: {
+        associate: (models) => {
+          ScheduledTask.belongsTo(models.User, {
+            foreignKey: 'userId',
+            onDelete: 'CASCADE'
+          });
+        }
       }
     }
-  });
+  );
 
   return ScheduledTask;
 };
