@@ -36,7 +36,8 @@ if (env === 'development') {
   app.use(webpackHotMiddleware(compiler));
 }
 
-require('./server/routes')(app); // require application routes.
+app.use(require('./server/routes')); // require application routes.
+
 app.get('*', (req, res) => res.sendFile(
   path.resolve(__dirname, 'client/dist/index.html')
 ));
