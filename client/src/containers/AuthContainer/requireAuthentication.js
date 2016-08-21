@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import LandingPage from '../../components/LandingPage/LandingPage';
 
-export default function RequireAuthentication(Component) {
+export default function requireAuthentication(Component) {
   function WrapperComponent(props) {
     const { auth } = props;
 

@@ -55,6 +55,7 @@
     "ejs": "^2.5.1",
     "express": "^4.14.0",
     "google-libphonenumber": "^1.1.0",
+    "humps": "^1.1.0",
     "jsonwebtoken": "^7.1.6",
     "lodash": "^4.15.0",
     "logfilename": "^0.1.3",

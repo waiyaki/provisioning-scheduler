@@ -10,13 +10,17 @@ const muiTheme = getMuiTheme({
   }
 });
 
+const mainAppContainerStyles = {
+  margin: '1em 0.8em'
+};
+
 const MainAppContainer = props => (
   <MuiThemeProvider muiTheme={muiTheme}>
     <div>
       <AppHeaderContainer />
       <div className='row'>
         <div className='col-xs-12'>
-          <div className='box'>
+          <div className='box' style={mainAppContainerStyles}>
             {props.children}
           </div>
         </div>
