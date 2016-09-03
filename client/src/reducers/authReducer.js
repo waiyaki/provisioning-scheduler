@@ -45,6 +45,12 @@ export default function authReducer(state = INITIAL_AUTH_STATE, action) {
         errors: {}
       };
 
+    case authActionTypes.LOGOUT:
+      return {
+        ...INITIAL_AUTH_STATE,
+        isAuthenticated: false
+      };
+
     default:
       return state;
   }

@@ -5,15 +5,25 @@ import LandingPage from '../../components/LandingPage/LandingPage';
 import UnverifiedAccountContainer from './UnverifiedAccountContainer';
 
 export default function requireAuthentication(Component) {
-  function WrapperComponent(props) {
-    const { auth } = props;
-
-    if (!auth.isAuthenticated) {
-      return <LandingPage />;
-    } else if (auth.isAuthenticated && auth.user.isPending) {
-      return <UnverifiedAccountContainer />;
+  class WrapperComponent extends React.Component {
+    componentWillReceiveProps(nextProps) {
+      const { auth } = this.props;
+      const { auth: nextAuth } = nextProps;
+      if (auth.isAuthenticated !== nextAuth.isAuthenticated) {
+        this.forceUpdate();
+      }
     }
-    return <Component {...props} />;
+
+    render() {
+      const { auth } = this.props;
+
+      if (!auth.isAuthenticated) {
+        return <LandingPage />;
+      } else if (auth.isAuthenticated && auth.user.isPending) {
+        return <UnverifiedAccountContainer />;
+      }
+      return <Component {...this.props} />;
+    }
   }
 
   const mapStateToProps = (state) => {

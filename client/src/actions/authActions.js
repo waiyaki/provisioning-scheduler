@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 import * as actionTypes from '../constants/authActionTypes';
-import { setAuthToken } from '../utils';
+import { setAuthToken, removeAuthToken } from '../utils';
 
 export const register = data => dispatch => {
   dispatch({
@@ -87,4 +87,11 @@ export const login = data => dispatch => {
         return Promise.reject(error);
       }
     );
+};
+
+export const logout = () => dispatch => {
+  removeAuthToken();
+  dispatch({
+    type: actionTypes.LOGOUT
+  });
 };
