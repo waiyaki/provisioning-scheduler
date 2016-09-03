@@ -14,9 +14,11 @@ export default function authContainer(LoginOrRegisterComponent) {
       this.state = {
         errors: {}
       };
+
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleRegister = this.handleRegister.bind(this);
+      this.handleLogin = this.handleLogin.bind(this);
     }
 
     componentWillUnmount() {
@@ -32,12 +34,10 @@ export default function authContainer(LoginOrRegisterComponent) {
 
     handleSubmit(authActionFuncName) {
       const data = omit(this.state, 'errors');
-      switch (authActionFuncName) {
-        case 'register':
-          this.handleRegister(data);
-          break;
-        default:
-          // Noop
+      if (authActionFuncName === 'register') {
+        this.handleRegister(data);
+      } else if (authActionFuncName === 'login') {
+        this.handleLogin(data);
       }
     }
 
@@ -46,6 +46,14 @@ export default function authContainer(LoginOrRegisterComponent) {
         .then(
           () => browserHistory.push('/verify'),
           (/* error */) => { /* No op */ }
+        );
+    }
+
+    handleLogin(data) {
+      this.props.login(data)
+        .then(
+          () => browserHistory.push('/'),
+          (/* error */) => { /* Noop */ }
         );
     }
 
@@ -79,6 +87,7 @@ export default function authContainer(LoginOrRegisterComponent) {
       isFetching: PropTypes.bool.isRequired
     }).isRequired,
     clearAuthErrors: PropTypes.func.isRequired,
+    login: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired
   };
 

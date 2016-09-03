@@ -62,3 +62,29 @@ export const verifyToken = token => dispatch => {
       }
     );
 };
+
+export const login = data => dispatch => {
+  dispatch({
+    type: actionTypes.LOGIN_USER_REQUEST
+  });
+
+  return Axios.post('/api/users/login', data)
+    .then(
+      response => {
+        const user = response.data;
+        dispatch({
+          type: actionTypes.LOGIN_USER_SUCCESS,
+          user
+        });
+        setAuthToken(user.token);
+        return Promise.resolve();
+      },
+      error => {
+        dispatch({
+          type: actionTypes.LOGIN_USER_FAILURE,
+          error: error.response.data || error.message
+        });
+        return Promise.reject(error);
+      }
+    );
+};
