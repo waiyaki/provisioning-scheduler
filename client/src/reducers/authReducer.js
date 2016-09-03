@@ -1,7 +1,8 @@
 import * as authActionTypes from '../constants/authActionTypes';
+import { getAuthToken } from '../utils';
 
 const INITIAL_AUTH_STATE = {
-  isAuthenticated: false,
+  isAuthenticated: !!getAuthToken(),
   isFetching: false,
   user: {},
   errors: {}

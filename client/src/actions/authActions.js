@@ -1,6 +1,7 @@
 import Axios from 'axios';
 
 import * as actionTypes from '../constants/authActionTypes';
+import { setAuthToken } from '../utils';
 
 export const register = data => dispatch => {
   dispatch({
@@ -10,10 +11,12 @@ export const register = data => dispatch => {
   return Axios.post('/api/users', data)
     .then(
       response => {
+        const user = response.data;
         dispatch({
           type: actionTypes.REGISTER_USER_SUCCESS,
-          user: response.data
+          user
         });
+        setAuthToken(user.token);
         return Promise.resolve();
       },
       error => {
@@ -40,16 +43,20 @@ export const verifyToken = token => dispatch => {
   return Axios.get(`/api/users/verify-email/${token}/verify`)
     .then(
       response => {
+        const user = response.data;
         dispatch({
           type: actionTypes.VERIFY_ACCOUNT_SUCCESS,
-          user: response.data
+          user
         });
+        setAuthToken(user.token);
         return Promise.resolve();
       },
       error => {
         dispatch({
           type: actionTypes.VERIFY_ACCOUNT_FAILURE,
-          error: error.response.data || error.message
+          error: {
+            verificationError: error.response.data || error.message
+          }
         });
         return Promise.reject(error);
       }

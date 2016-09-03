@@ -6,7 +6,7 @@ export function titleCase(str) {
   ).join(' ');
 }
 
-export default function constructRenderableFields(fields = []) {
+export function constructRenderableFields(fields = []) {
   if (!Array.isArray(fields)) {
     throw new Error(`Expected an array of field objects, got ${fields}`);
   }
