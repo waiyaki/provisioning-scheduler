@@ -74,8 +74,16 @@ function sendEmail(user, type) {
         // };
         //
         // config.mail.smtp = temporaryMailerConfig.smtp;
-        logger.info('Configuring mailer: ', _.omit(
-          config.mail.smtp, 'auth.pass')
+        logger.info('Configuring mailer: ', Object.assign(
+          {},
+          config.mail.smtp,
+          {
+            auth: {
+              user: config.mail.smtp.auth.user,
+              pass: '<redacted>'
+            }
+          }
+        )
         );
         const transporter = nodemailer.createTransport(config.mail.smtp);
 

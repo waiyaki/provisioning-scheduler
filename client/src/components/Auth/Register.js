@@ -30,12 +30,9 @@ const fields = [{
 }, {
   name: 'password',
   type: 'password'
-}, {
-  name: 'confirmPassword',
-  type: 'password'
 }];
 
-const Register = (props) => (
+export const Register = (props) => (
   <div className='row'>
     <div className='col-xs col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4'>
       <div className='box'>
@@ -51,12 +48,16 @@ const Register = (props) => (
               <span key={index}>
                 <TextField
                   {...field}
+                  errorText={props.errors[field.name]}
                   fullWidth
                   onChange={props.handleInputChange}
                 /> <br />
               </span>
             ))}
-            <RaisedButton onClick={props.handleSubmit} primary>
+            <RaisedButton
+              onClick={() => props.handleSubmit('register')}
+              primary
+            >
               Register
             </RaisedButton>
           </CardText>

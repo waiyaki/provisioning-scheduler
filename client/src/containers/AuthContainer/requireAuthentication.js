@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import LandingPage from '../../components/LandingPage/LandingPage';
+import UnverifiedAccountContainer from './UnverifiedAccountContainer';
 
 export default function requireAuthentication(Component) {
   function WrapperComponent(props) {
@@ -9,8 +10,9 @@ export default function requireAuthentication(Component) {
 
     if (!auth.isAuthenticated) {
       return <LandingPage />;
+    } else if (auth.isAuthenticated && auth.user.isPending) {
+      return <UnverifiedAccountContainer />;
     }
-
     return <Component {...props} />;
   }
 
