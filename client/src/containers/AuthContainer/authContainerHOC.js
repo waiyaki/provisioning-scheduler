@@ -21,6 +21,13 @@ export default function authContainer(LoginOrRegisterComponent) {
       this.handleLogin = this.handleLogin.bind(this);
     }
 
+    componentDidMount() {
+      const { auth } = this.props;
+      if (auth.isAuthenticated) {
+        browserHistory.push('/');
+      }
+    }
+
     componentWillUnmount() {
       this.props.clearAuthErrors();
     }
