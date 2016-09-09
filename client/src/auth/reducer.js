@@ -1,4 +1,4 @@
-import * as authActionTypes from '../constants/authActionTypes';
+import * as authActionTypes from './constants';
 import { getAuthToken } from '../utils';
 
 const INITIAL_AUTH_STATE = {

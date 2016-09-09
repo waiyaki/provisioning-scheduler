@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import AppHeader from '../../components/MainAppBar/MainAppBar';
-import { logout } from '../../actions/authActions';
+import auth from '../../auth';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class AppHeaderContainer extends React.Component {
@@ -23,14 +23,10 @@ AppHeaderContainer.propTypes = {
   logout: React.PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => {
-  const { auth } = state;
-
-  return {
-    auth
-  };
-};
+const mapStateToProps = state => ({
+  auth: auth.selectors.getAuth(state)
+});
 
 export default connect(mapStateToProps, {
-  logout
+  logout: auth.actions.logout
 })(AppHeaderContainer);

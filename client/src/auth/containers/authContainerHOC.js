@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 
 import omit from 'lodash/omit';
 
-import * as authActions from '../../actions/authActions';
+import * as authActions from '../actions';
 
 export default function authContainer(LoginOrRegisterComponent) {
   class AuthContainerWrapper extends React.Component {

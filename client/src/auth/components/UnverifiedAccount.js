@@ -14,7 +14,7 @@ const cardTextStyles = {
   fontSize: '1.2em'
 };
 
-const UnverifiedAccount = ({ user, isFetching, params }) => (
+export const UnverifiedAccount = ({ user, isFetching, params }) => (
   <div className='row'>
     <div className='col-xs col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4'>
       <div className='box'>

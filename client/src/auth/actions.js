@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-import * as actionTypes from '../constants/authActionTypes';
+import * as actionTypes from './constants';
 import { setAuthToken, removeAuthToken } from '../utils';
 
 export const register = data => dispatch => {
@@ -16,7 +16,6 @@ export const register = data => dispatch => {
           type: actionTypes.REGISTER_USER_SUCCESS,
           user
         });
-        setAuthToken(user.token);
         return Promise.resolve();
       },
       error => {

@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 
-import UnverifiedAccount from '../../components/Auth/UnverifiedAccount';
-import { verifyToken } from '../../actions/authActions';
+import UnverifiedAccount from '../components/UnverifiedAccount';
+import { verifyToken } from '../actions';
 
 class UnverifiedAccountContainer extends React.Component {
   constructor(props) {
