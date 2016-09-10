@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 
-import Routes from '../../routes';
-import DevTools from '../../containers/DevTools';
+import Routes from '../routes';
+import DevTools from '../DevTools';
 
 function Root(props) {
   return (

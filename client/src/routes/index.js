@@ -1,8 +1,8 @@
 import React from 'react';
 import { browserHistory, IndexRoute, Router, Route } from 'react-router';
 
-import MainAppContainer from '../containers/MainAppContainer';
-import Homepage from '../containers/HomeContainer/HomeContainer';
+import MainAppContainer from '../layout/containers/MainAppContainer';
+import Homepage from '../layout/containers/HomeContainer';
 
 import auth from '../auth';
 

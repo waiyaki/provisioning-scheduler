@@ -3,7 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 
 import rootReducer from '../rootReducer';
-import DevTools from '../containers/DevTools';
+import DevTools from '../DevTools';
 
 const loggerMiddleware = createLogger();
 

@@ -9,7 +9,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import './public/main.css';
 
 import configureStore from './src/store';
-import Root from './src/containers/Root';
+import Root from './src/Root';
 
 
 const store = configureStore();

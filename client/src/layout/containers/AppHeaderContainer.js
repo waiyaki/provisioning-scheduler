@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import AppHeader from '../../components/MainAppBar/MainAppBar';
+import AppHeader from '../components/MainAppBar';
 import auth from '../../auth';
 
 // eslint-disable-next-line react/prefer-stateless-function
