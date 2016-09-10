@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LandingPage from '../../components/LandingPage/LandingPage';
+import LandingPage from '../../layout/components/LandingPage';
 import UnverifiedAccountContainer from './UnverifiedAccountContainer';
 
 export default function requireAuthentication(Component) {

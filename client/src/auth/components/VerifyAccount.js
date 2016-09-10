@@ -11,12 +11,16 @@ export default function VerifyAccount({ user }) {
         Thank you for registering, we've sent you a confirmation email.
         Kindly click on the link provided in the email to confirm your account, thanks.
       </p><br />
-      <p style={{ fontSize: '0.8em', marginBottom: '0.6em' }}>
-        Already Confirmed?
-      </p>
-      <RaisedButton onClick={() => browserHistory.push('/login')}>
-        Login
-      </RaisedButton>
+      {!user && (
+        <div>
+          <p style={{ fontSize: '0.8em', marginBottom: '0.6em' }}>
+            Already Confirmed?
+          </p>
+          <RaisedButton onClick={() => browserHistory.push('/login')}>
+            Login
+          </RaisedButton>
+        </div>
+      )}
     </div>
   );
 }

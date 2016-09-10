@@ -1,7 +1,7 @@
 import { PropTypes } from 'react';
 
 import constructAuthComponent from './constructAuthComponent';
-import authContainerHOC from '../../containers/AuthContainer/authContainerHOC';
+import authContainerHOC from '../containers/authContainerHOC';
 
 const fields = [{
   name: 'firstName'
