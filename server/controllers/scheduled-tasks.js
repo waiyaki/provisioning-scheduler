@@ -100,7 +100,25 @@ function list(req, res) {
     );
 }
 
+function retrieve(req, res) {
+  const { taskId } = req.params;
+  return findAndPopulate({ value: taskId })
+    .then(task => {
+      if (!task) {
+        return handleErrors.send(res, {
+          message: `Task id ${taskId} doesn't exist.`
+        });
+      }
+      return res.status(200).send(task.toJSON());
+    })
+    .catch(error => {
+      logger.error('Error getting single task taskId: ', req.params.taskId, error);
+      return handleErrors.resolve(res, error);
+    });
+}
+
 module.exports = {
   create,
-  list
+  list,
+  retrieve
 };

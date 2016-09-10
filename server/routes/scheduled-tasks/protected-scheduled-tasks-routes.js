@@ -19,4 +19,8 @@ protectedScheduledTasksRoutes.route('/')
   .get(scheduledTasksController.list)
   .all(disallowMethod);
 
+protectedScheduledTasksRoutes.route('/:taskId')
+  .get(scheduledTasksController.retrieve)
+  .all(disallowMethod);
+
 module.exports = protectedScheduledTasksRoutes;
