@@ -58,7 +58,7 @@ function create(req, res) {
     .create(
       Object.assign({}, req.body, {
         userId: req.user.id,
-        time: moment(req.body.time, 'hh').toDate().toLocaleTimeString()
+        time: moment(req.body.time, 'hh:mm:ss').toDate().toLocaleTimeString()
       })
     )
     .then(
@@ -117,8 +117,34 @@ function retrieve(req, res) {
     });
 }
 
+function update(req, res) {
+  const { taskId } = req.params;
+
+  return findAndPopulate({ value: taskId })
+    .then(task => {
+      const data = req.body;
+
+      if (data.time) {
+        data.time = moment(data.time, 'hh:mm:ss').toDate().toLocaleTimeString();
+      }
+      return task.update(
+        data, { fields: Object.keys(data) }
+      )
+      .then(() => res.status(200).send(task))
+      .catch(error => {
+        logger.error('Error updating task: ', taskId, error);
+        return handleErrors.resolve(res, error);
+      });
+    })
+    .catch(error => {
+      logger.error('Error getting single task taskId: ', req.params.taskId, error);
+      return handleErrors.resolve(res, error);
+    });
+}
+
 module.exports = {
   create,
   list,
-  retrieve
+  retrieve,
+  update
 };

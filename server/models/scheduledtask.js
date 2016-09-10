@@ -34,7 +34,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TIME,
       allowNull: false,
       get() {
-        return `${this.getDataValue('time')}hrs`;
+        const time = this.getDataValue('time');
+        return 'AMPM'.indexOf(time.slice(-2)) > -1 ? time : `${time}hrs`;
       }
     }
   };
