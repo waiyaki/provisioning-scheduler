@@ -6,13 +6,15 @@ import { AppContainer } from 'react-hot-loader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import once from 'lodash/once';
 
-import App from './App';
+import Routes from './routes';
 
 const injectTap = once(injectTapEventPlugin);
 injectTap();
 
 render(
-  <AppContainer><App /></AppContainer>,
+  <AppContainer>
+    <Routes />
+  </AppContainer>,
   document.getElementById('root')
 );
 
