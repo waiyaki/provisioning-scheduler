@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 export default class SchedulerContainer extends Component {
   render() {
     return (
-      <div>SchedulerContainer Content</div>
+      <h2>SchedulerContainer Contents</h2>
     );
   }
 }

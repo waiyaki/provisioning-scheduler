@@ -17,7 +17,7 @@ const App = props => (
       <div className='col-xs-12'>
         <AppHeaderContainer />
         <div className='container'>
-          <h1>Hello World!</h1>
+          {props.children}
         </div>
       </div>
     </div>

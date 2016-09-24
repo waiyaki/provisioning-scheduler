@@ -7,23 +7,28 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import once from 'lodash/once';
 
 import Routes from './routes';
+import createStore from './redux/store';
 
 const injectTap = once(injectTapEventPlugin);
 injectTap();
 
+const store = createStore();
+
 render(
   <AppContainer>
-    <Routes />
+    <Routes store={store} />
   </AppContainer>,
   document.getElementById('root')
 );
 
 if (module.hot) {
-  module.hot.accept('./App', () => {
+  module.hot.accept('./routes', () => {
     // eslint-disable-next-line global-require, no-shadow
-    const App = require('./App').default;
+    const Routes = require('./routes').default;
     render(
-      <AppContainer><App /></AppContainer>,
+      <AppContainer>
+        <Routes store={store} />
+      </AppContainer>,
       document.getElementById('root')
     );
   });
