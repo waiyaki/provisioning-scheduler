@@ -1,9 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: path.join(__dirname, 'client/public/index.html'),
+  template: path.join(__dirname, 'client/index.html'),
   filename: 'index.html',
   inject: 'body'
 });
@@ -22,17 +24,15 @@ const config = {
     loaders: [{
       test: /\.jsx?$/,
       loaders: ['babel?cacheDirectory'],
-      exclude: /node_modules/
-    }, {
-      test: /\.css?$/,
-      loaders: ['style', 'css'],
-      exclude: /node_modules/
+      include: path.join(__dirname, 'client')
     }]
   },
   resolve: ['', '.js', '.jsx'],
+  postcss: () => [autoprefixer],
   plugins: [
     HtmlWebpackPluginConfig,
-    new webpack.optimize.OccurenceOrderPlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new ExtractTextPlugin('styles.css')
   ]
 };
 
@@ -41,13 +41,27 @@ const config = {
  */
 if (process.env.NODE_ENV === 'production') {
   config.devtool = false;
+  config.module.loaders = [
+    ...config.module.loaders,
+    {
+      test: /\.css/,
+      loader: ExtractTextPlugin.extract('style', 'css?modules!postcss')
+    }
+  ];
   config.plugins = [
     ...config.plugins,
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      comments: false,
       compress: {
+        screw_ie8: true,
         warnings: false
+      },
+      mangle: {
+        screw_ie8: true
+      },
+      output: {
+        comments: false,
+        screw_ie8: true
       }
     }),
     new webpack.DefinePlugin({
@@ -60,10 +74,18 @@ if (process.env.NODE_ENV === 'production') {
     'react-hot-loader/patch',
     ...config.entry
   ];
+  config.module.loaders = [
+    ...config.module.loaders,
+    {
+      test: /\.css?$/,
+      loader: 'style!css?modules!postcss'
+    }
+  ];
   config.plugins = [
     ...config.plugins,
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ];
 }
+
 module.exports = config;

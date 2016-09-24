@@ -24,7 +24,6 @@ app.use(logger('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(publicPath));
 
 // Configure webpack hot reloading
 if (env === 'development') {
@@ -34,6 +33,8 @@ if (env === 'development') {
     publicPath: webpackConfig.output.publicPath
   }));
   app.use(webpackHotMiddleware(compiler));
+} else {
+  app.use(express.static(publicPath));
 }
 
 app.use(require('./server/routes')); // require application routes.
