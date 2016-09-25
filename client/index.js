@@ -8,12 +8,18 @@ import once from 'lodash/once';
 
 import Routes from './routes';
 import createStore from './redux/store';
+import { getAuthToken } from './utils';
 import './index.css';
 
 const injectTap = once(injectTapEventPlugin);
 injectTap();
 
-const store = createStore();
+const store = createStore({
+  auth: {
+    isAuthenticated: !!getAuthToken(),
+    user: null
+  }
+});
 
 render(
   <AppContainer>

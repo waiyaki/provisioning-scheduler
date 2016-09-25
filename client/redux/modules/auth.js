@@ -1,6 +1,8 @@
 import curry from 'lodash/fp/curry';
 import compose from 'lodash/fp/compose';
 
+import { setAuthToken } from '../../utils';
+
 // Action types.
 const LOGIN_REQUEST = 'scheduler/auth/LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'scheduler/auth/LOGIN_SUCCESS';
@@ -41,10 +43,26 @@ export default function reducer(state = initialState, action) {
 }
 
 // Actions
+const interceptAndSaveAuthToken = curry((apiCall, client) =>
+  new Promise((resolve, reject) => {
+    apiCall(client)
+      .then(
+        response => {
+          const { token } = response.data;
+          setAuthToken(token);
+          return resolve(response);
+        },
+        reject
+      )
+      .catch(reject);
+  }));
+
 export function login(data) {
   return {
     types: [LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE],
-    callApi: (client) => client.post('/api/users/login', data)
+    callApi: interceptAndSaveAuthToken(
+      client => client.post('/api/users/login', data)
+    )
   };
 }
 

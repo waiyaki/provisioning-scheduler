@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { selectors as authSelectors } from '../../redux/modules/auth';
 
 const redirectIfAuthenticated = ({ auth }) => {
-  if (auth.user && auth.isAuthenticated) {
+  if (auth.isAuthenticated) {
     browserHistory.push('/');
   }
 };
