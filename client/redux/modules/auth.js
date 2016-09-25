@@ -1,12 +1,13 @@
 import curry from 'lodash/fp/curry';
 import compose from 'lodash/fp/compose';
 
-import { setAuthToken } from '../../utils';
+import { setAuthToken, removeAuthToken } from '../../utils';
 
 // Action types.
 const LOGIN_REQUEST = 'scheduler/auth/LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'scheduler/auth/LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'scheduler/auth/LOGIN_FAILURE';
+const LOGOUT = 'scheduler/auth/LOGOUT';
 
 // Reducer
 const initialState = {
@@ -37,6 +38,9 @@ export default function reducer(state = initialState, action) {
         error: action.error
       };
 
+    case LOGOUT:
+      return initialState;
+
     default:
       return state;
   }
@@ -63,6 +67,13 @@ export function login(data) {
     callApi: interceptAndSaveAuthToken(
       client => client.post('/api/users/login', data)
     )
+  };
+}
+
+export function logout() {
+  removeAuthToken();
+  return {
+    type: LOGOUT
   };
 }
 
