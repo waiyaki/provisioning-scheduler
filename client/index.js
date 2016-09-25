@@ -8,6 +8,7 @@ import once from 'lodash/once';
 
 import Routes from './routes';
 import createStore from './redux/store';
+import './index.css';
 
 const injectTap = once(injectTapEventPlugin);
 injectTap();
