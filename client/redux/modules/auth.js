@@ -7,6 +7,9 @@ import { setAuthToken, removeAuthToken } from '../../utils';
 const LOGIN_REQUEST = 'scheduler/auth/LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'scheduler/auth/LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'scheduler/auth/LOGIN_FAILURE';
+const REGISTER_REQUEST = 'scheduler/auth/REGISTER_REQUEST';
+const REGISTER_SUCCESS = 'scheduler/auth/REGISTER_SUCCESS';
+const REGISTER_FAILURE = 'scheduler/auth/REGISTER_FAILURE';
 const LOGOUT = 'scheduler/auth/LOGOUT';
 
 // Reducer
@@ -17,12 +20,14 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case REGISTER_REQUEST:
     case LOGIN_REQUEST:
       return {
         ...state,
         isFetching: true
       };
 
+    case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       return {
         ...state,
@@ -31,6 +36,7 @@ export default function reducer(state = initialState, action) {
         user: action.payload
       };
 
+    case REGISTER_FAILURE:
     case LOGIN_FAILURE:
       return {
         ...state,
@@ -67,6 +73,13 @@ export function login(data) {
     callApi: interceptAndSaveAuthToken(
       client => client.post('/api/users/login', data)
     )
+  };
+}
+
+export function register(data) {
+  return {
+    types: [REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE],
+    callApi: client => client.post('/api/users', data)
   };
 }
 

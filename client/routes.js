@@ -3,7 +3,9 @@ import { browserHistory, Router, Route, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 
 import App from './App';
-import { SchedulerContainer, LoginContainer } from './containers';
+import {
+  SchedulerContainer, LoginContainer, RegisterContainer
+} from './containers';
 
 const Routes = ({ store }) => (
   <Provider store={store}>
@@ -11,6 +13,7 @@ const Routes = ({ store }) => (
       <Route path='/' component={App}>
         <IndexRoute component={SchedulerContainer} />
         <Route path='/login' component={LoginContainer} />
+        <Route path='/register' component={RegisterContainer} />
       </Route>
     </Router>
   </Provider>

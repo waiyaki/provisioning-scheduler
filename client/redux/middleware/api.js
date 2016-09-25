@@ -18,7 +18,7 @@ export default function callApiMiddleware({ dispatch, getState }) {
       return next(action);
     }
 
-    if (!Array.isArray(types) || !types.length === 3 || !types.every(isStr)) {
+    if (!Array.isArray(types) || types.length !== 3 || !types.every(isStr)) {
       throw new Error('Expected an array of three string types.');
     }
 
