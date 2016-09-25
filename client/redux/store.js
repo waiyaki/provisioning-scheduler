@@ -1,13 +1,16 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
+import callApiMiddleware from './middleware/api';
 
 import reducer from './modules/reducer';
 
-let middleware = [thunkMiddleware];
+let middleware = [thunkMiddleware, callApiMiddleware];
 
 if (process.env.NODE_ENV !== 'production') {
-  const loggerMiddleware = createLogger();
+  const loggerMiddleware = createLogger({
+    predicate: (_, action) => !action.type.startsWith('redux-form')
+  });
   middleware = [...middleware, loggerMiddleware];
 }
 

@@ -4,6 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { AppHeaderContainer } from './containers';
+import appStyles from './AppStyles.css';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -16,7 +17,7 @@ const App = props => (
     <div className='row'>
       <div className='col-xs-12'>
         <AppHeaderContainer />
-        <div className='container'>
+        <div className={`${appStyles.mainContent} container-fluid`}>
           {props.children}
         </div>
       </div>
