@@ -39,7 +39,7 @@ const Register = ({ handleSubmit, pristine, submitting, register, auth }) => (
           key={index}
         />
       ))}
-      <div className={`${authStyles.loginButton} text-xs-center`}>
+      <div className={`${authStyles.submit} text-xs-center`}>
         {submitting
           ? <CircularProgress size={0.5} />
           : <RaisedButton disabled={pristine} type='submit' primary>

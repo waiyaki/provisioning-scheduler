@@ -18,12 +18,16 @@ export default function callApiMiddleware({ dispatch, getState }) {
       return next(action);
     }
 
+    let err = null;
     if (!Array.isArray(types) || types.length !== 3 || !types.every(isStr)) {
-      throw new Error('Expected an array of three string types.');
+      err = new Error('Expected an array of three string types.');
+    } else if (!isFn(callApi)) {
+      err = new Error('Expected callApi to be a function.');
     }
-
-    if (!isFn(callApi)) {
-      throw new Error('Expected callApi to be a function.');
+    if (err) {
+      // sometimes the thrown error is being swallowed by a try/catch we don't control
+      console.error(err); // eslint-disable-line no-console
+      throw err;
     }
 
     if (!shouldCallApi(getState())) {
