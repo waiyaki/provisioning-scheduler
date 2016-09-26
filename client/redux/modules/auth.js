@@ -53,19 +53,14 @@ export default function reducer(state = initialState, action) {
 }
 
 // Actions
-const interceptAndSaveAuthToken = curry((apiCall, client) =>
-  new Promise((resolve, reject) => {
-    apiCall(client)
-      .then(
-        response => {
-          const { token } = response.data;
-          setAuthToken(token);
-          return resolve(response);
-        },
-        reject
-      )
-      .catch(reject);
-  }));
+const interceptAndSaveAuthToken = apiCall => client => (
+  apiCall(client)
+    .then(response => {
+      const { token } = response.data;
+      setAuthToken(token);
+      return response;
+    })
+);
 
 export function login(data) {
   return {
