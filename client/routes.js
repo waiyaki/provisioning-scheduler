@@ -4,16 +4,21 @@ import { Provider } from 'react-redux';
 
 import App from './App';
 import {
-  SchedulerContainer, LoginContainer, RegisterContainer
+  SchedulerContainer, LoginContainer, RegisterContainer,
+  VerifyAccountContainer
 } from './containers';
 import { LandingPage } from './components';
 import { selectors as authSelectors } from './redux/modules/auth';
 
-const { getAuth } = authSelectors;
+const { getAuth, getUser } = authSelectors;
 const requireAuth = store => (nextState, replace) => {
-  const { isAuthenticated } = getAuth(store.getState());
+  const state = store.getState();
+  const { isAuthenticated } = getAuth(state);
+  const user = getUser(state);
   if (!isAuthenticated) {
     replace('/welcome');
+  } else if (isAuthenticated && user && user.isPending) {
+    replace('/verify');
   }
 };
 
@@ -28,6 +33,7 @@ const Routes = ({ store }) => (
         <Route path='/login' component={LoginContainer} />
         <Route path='/register' component={RegisterContainer} />
         <Route path='/welcome' component={LandingPage} />
+        <Route path='/verify(/:token)' component={VerifyAccountContainer} />
       </Route>
     </Router>
   </Provider>

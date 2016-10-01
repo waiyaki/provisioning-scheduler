@@ -86,7 +86,8 @@ module.exports = (sequelize, DataTypes) => {
         return jwt.sign({
           id: this.id,
           username: this.username,
-          exp: parseInt(expiry.getTime() / 1000, 10)
+          exp: parseInt(expiry.getTime() / 1000, 10),
+          isPending: true
         }, config.SECRET_KEY);
       },
 

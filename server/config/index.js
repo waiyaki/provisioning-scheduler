@@ -1,12 +1,12 @@
 const _ = require('lodash');
 
 const baseConfig = {
-  hostAPIUrl: process.env.HOST_URL || 'http://localhost:8000/api',
+  hostAPIUrl: process.env.HOST_URL || 'http://localhost:8000',
   SECRET_KEY: process.env.SECRET_KEY
 };
 
 const mailConfig = {
-  callbackUrl: `${baseConfig.hostAPIUrl}/users`,
+  callbackUrl: `${baseConfig.hostAPIUrl}`,
   from: 'Provisioning Scheduler <no-reply.notifications@provisioning-scheduler>',
   signature: 'Provisioning Scheduler Team',
   smtp: {

@@ -30,7 +30,9 @@ function renderTemplate(template, options = {}) {
       callbackUrl: config.mail.callbackUrl,
       signature: config.mail.signature
     }, options);
-    logger.info('Rendering email template with locals: ', locals);
+    logger.info('Rendering email template with locals: ',
+      _.omit(locals, 'verificationToken'));
+
     try {
       return resolve(ejs.render(template, locals));
     } catch (error) {
@@ -74,8 +76,13 @@ function sendEmail(user, type) {
         // };
         //
         // config.mail.smtp = temporaryMailerConfig.smtp;
-        logger.info('Configuring mailer: ', _.omit(
-          config.mail.smtp, 'auth.pass')
+        logger.info('Configuring mailer: ', Object.assign({},
+          config.mail.smtp, {
+            auth: {
+              user: config.mail.smtp.auth.user,
+              pass: '<redacted>'
+            }
+          })
         );
         const transporter = nodemailer.createTransport(config.mail.smtp);
 

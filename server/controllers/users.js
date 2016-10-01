@@ -117,7 +117,7 @@ function resendVerificationEmail(req, res) {
               verifiedUser => {
                 if (!verifiedUser) {
                   return handleErrors.send(res, {
-                    message: 'This user does not exist. Try registering instead.'
+                    message: 'That email does not match our records.'
                   });
                 }
 

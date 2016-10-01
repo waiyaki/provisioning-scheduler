@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
@@ -11,7 +12,10 @@ const AppHeader = ({ auth, logout }) => (
         label='Logout'
         onTouchTap={logout}
       />
-      : null
+      : <FlatButton
+        label='Login'
+        onTouchTap={() => browserHistory.push('/login')}
+      />
     }
   />
 );
