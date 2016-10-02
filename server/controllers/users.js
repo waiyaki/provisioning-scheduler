@@ -63,7 +63,8 @@ function verifyEmail(req, res) {
               logger.info('Created verified user: ', verifiedUser.toJSON());
               res.status(200).send(
                 Object.assign({}, verifiedUser.toJSON(), {
-                  verified: true
+                  verified: true,
+                  token: verifiedUser.generateToken()
                 })
               );
 

@@ -118,7 +118,9 @@ export function verifyToken(token) {
     types: [
       VERIFY_ACCOUNT_REQUEST, VERIFY_ACCOUNT_SUCCESS, VERIFY_ACCOUNT_FAILURE
     ],
-    callApi: client => client.get(`/api/users/verify-email/${token}/verify`)
+    callApi: interceptAndSaveAuthToken(
+      client => client.get(`/api/users/verify-email/${token}/verify`)
+    )
   };
 }
 

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import { reduxForm, Field } from 'redux-form';
 // eslint-disable-next-line import/no-unresolved
 import { TextField } from 'redux-form-material-ui';
@@ -35,9 +36,14 @@ const Login = ({ handleSubmit, pristine, submitting, login, auth }) => (
       <div className={`${authStyles.submit} text-xs-center`}>
         {submitting
           ? <CircularProgress size={0.5} />
-          : <RaisedButton disabled={pristine} type='submit' primary>
-            Login
-          </RaisedButton>
+          : <div>
+            <RaisedButton disabled={pristine} type='submit' primary>
+              Login
+            </RaisedButton>
+            <p className={authStyles['other-action']}>
+              Not registered yet? <Link to='/register'>Click here.</Link>
+            </p>
+          </div>
         }
       </div>
     </form>
