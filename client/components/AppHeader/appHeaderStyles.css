@@ -1,0 +1,10 @@
+.link-header {
+  color: inherit;;
+  text-decoration: none;
+}
+
+.link-header:hover, .link-header:visited {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}

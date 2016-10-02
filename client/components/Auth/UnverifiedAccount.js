@@ -24,7 +24,7 @@ export const UnverifiedAccount = ({
 
   return (
     <div className='row'>
-      <div className='col-xs-12 col-sm-8 offset-sm-2 col-md-4 offset-md-4'>
+      <div className='col-xs-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4'>
         <Card className='text-xs-center'>
           <CardTitle
             title='Provisioning Scheduler'
