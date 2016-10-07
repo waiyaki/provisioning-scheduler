@@ -1,0 +1,26 @@
+.main {
+  padding: 1em 0;
+}
+
+.heading {
+  line-height: 1em;
+  padding-bottom: 0.2em;
+}
+
+.content {
+  padding-top: 1em;
+}
+
+.submit {
+  margin-top: 1em;
+}
+
+.timePicker .submit {
+  text-align: left;
+}
+
+.error {
+  font-size: 0.8em;
+  color: #f00;
+  text-align: left;
+}

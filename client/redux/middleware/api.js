@@ -1,6 +1,14 @@
 import curry from 'lodash/fp/curry';
 import Axios from 'axios';
 
+import { getAuthToken } from '../../utils';
+
+const axiosWithAuth = Axios.create({
+  headers: { 'X-Access-Token': getAuthToken() }
+});
+
+const getAxiosInstance = auth => (auth ? axiosWithAuth : Axios);
+
 export default function callApiMiddleware({ dispatch, getState }) {
   return next => action => {
     const is = curry((type, value) => typeof value === type);
@@ -11,7 +19,8 @@ export default function callApiMiddleware({ dispatch, getState }) {
       types,
       callApi,
       shouldCallApi = () => true,
-      payload = {}
+      payload = {},
+      meta: { authenticate = false } = {}
     } = action;
 
     if (!types) {
@@ -41,10 +50,10 @@ export default function callApiMiddleware({ dispatch, getState }) {
       type: REQUEST
     });
 
-    return callApi(Axios)
+    return callApi(getAxiosInstance(authenticate))
       .then(
         response => dispatch({
-          payload: { ...payload, ...response.data },
+          payload: response.data,
           type: SUCCESS
         }),
         error => dispatch({
