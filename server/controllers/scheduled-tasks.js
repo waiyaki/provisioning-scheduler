@@ -11,6 +11,7 @@ function findAndPopulate({
   value,
   includeModel = User,
   as = 'user',
+  q = {},
   attributes
 } = {}) {
   if (whichFind === 'findOne' && !value) {
@@ -44,11 +45,22 @@ function findAndPopulate({
   };
 
   if (whichFind === 'findOne') {
-    query.where = {
-      [field]: value
-    };
+    if (q.where) {
+      query.where = Object.assign({}, q.where, {
+        [field]: value
+      });
+    } else {
+      query.where = {
+        [field]: value
+      };
+    }
+  } else {
+    if (q.where) {
+      query.where = q.where;
+    }
   }
 
+  logger.info('Getting query: ', query.where);
   return sourceModel[whichFind](query);
 }
 
@@ -89,15 +101,27 @@ function create(req, res) {
 }
 
 function list(req, res) {
-  logger.info('Listing all available scheduledTasks...');
-  return findAndPopulate({ whichFind: 'findAll' })
-    .then(
-      tasks => res.status(200).send(tasks),
-      error => {
-        logger.error('Error while fetching all scheduled tasks', error);
-        return handleErrors.resolve(res, error);
+  const today = new Date(new Date().toISOString().replace(/T.*/, ''));
+  const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+  return findAndPopulate({
+    whichFind: 'findAll',
+    q: {
+      where: {
+        createdAt: {
+          $lt: tomorrow,
+          $gt: today
+        },
+        userId: req.user.id
       }
-    );
+    }
+  })
+  .then(
+    tasks => res.status(200).send(tasks),
+    error => {
+      logger.error('Error while fetching all scheduled tasks', error);
+      return handleErrors.resolve(res, error);
+    }
+  );
 }
 
 function retrieve(req, res) {
