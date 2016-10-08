@@ -1,4 +1,4 @@
-import { prop, compose } from 'ramda';
+import { prop } from 'ramda';
 
 const INITIAL_STATE = {
   isFetching: false,
@@ -10,7 +10,9 @@ const CREATE_TASK_REQUEST = 'CREATE_TASK_REQUEST';
 const CREATE_TASK_SUCCESS = 'CREATE_TASK_SUCCESS';
 const CREATE_TASK_FAILURE = 'CREATE_TASK_FAILURE';
 
+const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST';
 const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS';
+const FETCH_TASKS_FAILURE = 'FETCH_TASKS_FAILURE';
 
 export default function tasks(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -24,10 +26,15 @@ export default function tasks(state = INITIAL_STATE, action) {
         items: [action.payload, ...state.items]
       };
     case CREATE_TASK_FAILURE:
+    case FETCH_TASKS_FAILURE:
       return { ...state, isFetching: false, error: action.error };
 
+    case FETCH_TASKS_REQUEST:
+      return { ...state, isFetching: true };
     case FETCH_TASKS_SUCCESS:
-      return { ...state, isFetching: false, items: action.payload };
+      return {
+        ...state, isFetching: false, items: action.payload, error: null
+      };
 
     default:
       return state;
@@ -35,6 +42,17 @@ export default function tasks(state = INITIAL_STATE, action) {
 }
 
 // Actions
+export function fetchTasks() {
+  return (dispatch, getState) => {
+    const { tasks: { items } } = getState();
+    return !items.length && dispatch({
+      types: [FETCH_TASKS_REQUEST, FETCH_TASKS_SUCCESS, FETCH_TASKS_FAILURE],
+      callApi: client => client.get('/api/scheduled-tasks'),
+      meta: { authenticate: true }
+    });
+  };
+}
+
 export function createTask(data) {
   return {
     types: [CREATE_TASK_REQUEST, CREATE_TASK_SUCCESS, CREATE_TASK_FAILURE],
@@ -44,7 +62,7 @@ export function createTask(data) {
 }
 
 // Selectors
-const getTasks = compose(prop('tasks'), prop('scheduler'));
+const getTasks = prop('tasks');
 export const selectors = {
   getTasks
 };
