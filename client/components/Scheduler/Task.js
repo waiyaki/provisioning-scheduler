@@ -8,7 +8,8 @@ export default function Task({ task: { activity, town, siteName, time } }) {
     <span>
       <ListItem
         primaryText={activity}
-        secondaryText={`In ${siteName}, ${town} at ${time}`}
+        secondaryText={
+          `In ${siteName}, ${town} at ${new Date(time).toLocaleTimeString()}`}
       />
       <Divider />
     </span>

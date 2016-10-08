@@ -29,14 +29,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
-    },
-    time: {
-      type: DataTypes.TIME,
-      allowNull: false,
-      get() {
-        const time = this.getDataValue('time');
-        return 'AMPM'.indexOf(time.slice(-2)) > -1 ? time : `${time}hrs`;
-      }
     }
   };
 

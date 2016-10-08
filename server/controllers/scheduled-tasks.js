@@ -1,5 +1,5 @@
 const logger = require('logfilename')(__filename);
-const moment = require('moment');
+const merge = require('lodash/merge');
 
 const { ScheduledTask, User } = require('../models');
 const { handleErrors } = require('../utils');
@@ -36,31 +36,28 @@ function findAndPopulate({
     attrs = { exclude: ['password'] };
   }
 
-  const query = {
+  let query = merge({}, q, {
     include: {
       model: includeModel,
       as,
       attributes: attrs
     }
-  };
+  });
 
   if (whichFind === 'findOne') {
     if (q.where) {
-      query.where = Object.assign({}, q.where, {
-        [field]: value
+      query = merge({}, query, q, {
+        where: {
+          [field]: value
+        }
       });
     } else {
       query.where = {
         [field]: value
       };
     }
-  } else {
-    if (q.where) {
-      query.where = q.where;
-    }
   }
 
-  logger.info('Getting query: ', query.where);
   return sourceModel[whichFind](query);
 }
 
@@ -69,8 +66,7 @@ function create(req, res) {
   return ScheduledTask
     .create(
       Object.assign({}, req.body, {
-        userId: req.user.id,
-        time: moment(req.body.time, 'hh:mm:ss').toDate().toLocaleTimeString()
+        userId: req.user.id
       })
     )
     .then(
@@ -112,7 +108,8 @@ function list(req, res) {
           $gt: today
         },
         userId: req.user.id
-      }
+      },
+      order: '"createdAt" DESC'
     }
   })
   .then(
@@ -147,10 +144,6 @@ function update(req, res) {
   return findAndPopulate({ value: taskId })
     .then(task => {
       const data = req.body;
-
-      if (data.time) {
-        data.time = moment(data.time, 'hh:mm:ss').toDate().toLocaleTimeString();
-      }
       return task.update(
         data, { fields: Object.keys(data) }
       )

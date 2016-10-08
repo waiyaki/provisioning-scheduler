@@ -38,7 +38,7 @@ module.exports = DataTypes => ({
     allowNull: false
   },
   time: {
-    type: DataTypes.TIME,
+    type: DataTypes.DATE,
     allowNull: false
   },
   projectManager: {

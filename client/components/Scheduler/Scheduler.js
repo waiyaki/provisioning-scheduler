@@ -8,18 +8,16 @@ import styles from './styles.css';
 const Scheduler = ({ onSubmit, tasks }) => (
   <div className='row'>
     <div className='col-xs-12 col-lg-10 col-lg-offset-1'>
-      <div className={styles.main}>
-        <h1 className={`text-center ${styles.heading}`}>
-          Provisioning Scheduler
-        </h1>
-        <Divider />
-        <div className={`row ${styles.content}`}>
-          <div className='col-xs-12 col-md-4'>
-            <RecentTasks tasks={tasks} />
-          </div>
-          <div className='col-xs-12 col-md-8'>
-            <ScheduleTask {...{ onSubmit, tasks }} />
-          </div>
+      <h1 className={`text-center ${styles.heading}`}>
+        Provisioning Scheduler
+      </h1>
+      <Divider />
+      <div className={`row ${styles.content}`}>
+        <div className='col-xs-12 col-md-4'>
+          <RecentTasks tasks={tasks} />
+        </div>
+        <div className='col-xs-12 col-md-8'>
+          <ScheduleTask {...{ onSubmit, tasks }} />
         </div>
       </div>
     </div>
