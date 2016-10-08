@@ -8,8 +8,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import styles from './landingPageInlineStyles';
 
 const LandingPage = () => (
-  <div className='row text-xs-center'>
-    <div className='col-xs-12 col-sm-8 offset-sm-2 col-md-4 offset-md-4'>
+  <div className='row text-center'>
+    <div className='col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4'>
       <Card className='text-center'>
         <CardTitle
           title='Provisioning Scheduler'

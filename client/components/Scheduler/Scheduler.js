@@ -7,9 +7,9 @@ import styles from './styles.css';
 
 const Scheduler = ({ onSubmit, tasks }) => (
   <div className='row'>
-    <div className='col-xs-12 col-lg-10 offset-lg-1'>
+    <div className='col-xs-12 col-lg-10 col-lg-offset-1'>
       <div className={styles.main}>
-        <h1 className={`text-xs-center ${styles.heading}`}>
+        <h1 className={`text-center ${styles.heading}`}>
           Provisioning Scheduler
         </h1>
         <Divider />

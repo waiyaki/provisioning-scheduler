@@ -7,7 +7,7 @@ import ScheduleTaskForm from './ScheduleTaskForm';
 const ScheduleTask = ({ onSubmit, tasks }) => (
   <Card zDepth={0}>
     <CardTitle
-      className='text-xs-center'
+      className='text-center'
       title='Schedule a New Task'
     />
     <Divider />

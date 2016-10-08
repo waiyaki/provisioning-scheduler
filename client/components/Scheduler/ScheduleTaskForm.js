@@ -36,7 +36,7 @@ const ScheduleTaskForm = ({
     {tasks.error && tasks.error.message && (
       <div className={styles.error}>{tasks.error.message}</div>
     )}
-    <div className='row text-xs-center'>
+    <div className='row text-center'>
       <div className='col-xs-12 col-md-6'>
         {renderFormFields(firstHalf, tasks)}
       </div>
@@ -52,7 +52,7 @@ const ScheduleTaskForm = ({
         </span>
       </div>
     </div>
-    <div className='text-xs-center'>
+    <div className='text-center'>
       {submitting
         ? <CircularProgress size={0.5} />
         : <div className={styles.submit}>

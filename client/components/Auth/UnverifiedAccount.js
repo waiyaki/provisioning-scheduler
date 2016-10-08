@@ -1,3 +1,5 @@
+/*  eslint-disable max-len */
+
 import React, { PropTypes } from 'react';
 import curry from 'lodash/fp/curry';
 
@@ -24,8 +26,8 @@ export const UnverifiedAccount = ({
 
   return (
     <div className='row'>
-      <div className='col-xs-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4'>
-        <Card className='text-xs-center'>
+      <div className='col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4'>
+        <Card className='text-center'>
           <CardTitle
             title='Provisioning Scheduler'
             titleStyle={titleStyles}

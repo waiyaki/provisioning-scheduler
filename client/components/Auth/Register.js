@@ -40,7 +40,7 @@ const Register = ({ handleSubmit, pristine, submitting, register, auth }) => (
           key={index}
         />
       ))}
-      <div className={`${authStyles.submit} text-xs-center`}>
+      <div className={`${authStyles.submit} text-center`}>
         {submitting
           ? <CircularProgress size={0.5} />
           : <div>
@@ -48,7 +48,7 @@ const Register = ({ handleSubmit, pristine, submitting, register, auth }) => (
               Register
             </RaisedButton>
 
-            <p className={authStyles['other-action']}>
+            <p className={authStyles.secondaryAction}>
               Already registered? <Link to='/login'>Login here.</Link>
             </p>
           </div>

@@ -33,14 +33,14 @@ const Login = ({ handleSubmit, pristine, submitting, login, auth }) => (
           key={index}
         />
       ))}
-      <div className={`${authStyles.submit} text-xs-center`}>
+      <div className={`${authStyles.submit} text-center`}>
         {submitting
           ? <CircularProgress size={0.5} />
           : <div>
             <RaisedButton disabled={pristine} type='submit' primary>
               Login
             </RaisedButton>
-            <p className={authStyles['other-action']}>
+            <p className={authStyles.secondaryAction}>
               Not registered yet? <Link to='/register'>Click here.</Link>
             </p>
           </div>

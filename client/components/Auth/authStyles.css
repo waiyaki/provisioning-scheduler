@@ -3,11 +3,21 @@
   color: #f00;
 }
 
-.submit .other-action {
+.submit .secondaryAction {
   margin-top: 1em;
 }
 
 .alreadyConfirmed {
   font-size: 0.8em;
   margin: 0.6em 0;
+}
+
+.secondaryAction a,
+.alreadyConfirmed a,
+.secondaryAction a:visited,
+.alreadyConfirmed a:visited,
+.secondaryAction a:hover,
+.alreadyConfirmed a:hover {
+  text-decoration: none;
+  color: #0275d8;
 }

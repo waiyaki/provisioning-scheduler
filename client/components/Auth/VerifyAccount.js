@@ -5,7 +5,7 @@ import styles from './authStyles.css';
 
 export default function VerifyAccount({ user, error }) {
   return (
-    <div className='text-xs-center'>
+    <div className='text-center'>
       {error && error.message
         ? <div>
           <p className={styles.error}>{error.message}</p>
@@ -18,7 +18,7 @@ export default function VerifyAccount({ user, error }) {
             Kindly click on the link provided in the email to confirm your account, thanks.
           </p>
           <p>
-            <small>
+            <small className={styles.alreadyConfirmed}>
               Didn't receive the email? <Link to='/verify/resend'>Click here.</Link>
             </small>
           </p>
