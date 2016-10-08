@@ -18,7 +18,7 @@ const ScheduleTask = ({ onSubmit, tasks }) => (
 );
 
 ScheduleTask.propTypes = {
-  onSubmit: React.PropTypes.func.isRequired,
+  onSubmit: React.PropTypes.func,
   tasks: React.PropTypes.object
 };
 

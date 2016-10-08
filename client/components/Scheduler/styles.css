@@ -24,3 +24,31 @@
   color: #f00;
   text-align: left;
 }
+
+.schedulerActions {
+  height: 100%;
+}
+
+.schedulerActions p {
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.870588);
+  display: block;
+  line-height: 36px;
+}
+
+.createTask {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .schedulerActions .content {
+    display: none;
+  }
+
+  .createTask {
+    display: block;
+  }
+}

@@ -3,11 +3,13 @@ import Axios from 'axios';
 
 import { getAuthToken } from '../../utils';
 
-const axiosWithAuth = Axios.create({
-  headers: { 'X-Access-Token': getAuthToken() }
-});
-
-const getAxiosInstance = auth => (auth ? axiosWithAuth : Axios);
+// Performance hit? 😕
+const getAxiosInstance = auth => (auth
+  ? Axios.create({
+    headers: { 'X-Access-Token': getAuthToken() }
+  })
+  : Axios
+);
 
 export default function callApiMiddleware({ dispatch, getState }) {
   return next => action => {

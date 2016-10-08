@@ -1,4 +1,4 @@
-import { prop } from 'ramda';
+import { prop, compose } from 'ramda';
 
 const INITIAL_STATE = {
   isFetching: false,
@@ -6,13 +6,13 @@ const INITIAL_STATE = {
   error: null
 };
 
-const CREATE_TASK_REQUEST = 'CREATE_TASK_REQUEST';
-const CREATE_TASK_SUCCESS = 'CREATE_TASK_SUCCESS';
-const CREATE_TASK_FAILURE = 'CREATE_TASK_FAILURE';
+const CREATE_TASK_REQUEST = 'scheduler/tasks/CREATE_TASK_REQUEST';
+const CREATE_TASK_SUCCESS = 'scheduler/tasks/CREATE_TASK_SUCCESS';
+const CREATE_TASK_FAILURE = 'scheduler/tasks/CREATE_TASK_FAILURE';
 
-const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST';
-const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS';
-const FETCH_TASKS_FAILURE = 'FETCH_TASKS_FAILURE';
+const FETCH_TASKS_REQUEST = 'scheduler/tasks/FETCH_TASKS_REQUEST';
+const FETCH_TASKS_SUCCESS = 'scheduler/tasks/FETCH_TASKS_SUCCESS';
+const FETCH_TASKS_FAILURE = 'scheduler/tasks/FETCH_TASKS_FAILURE';
 
 export default function tasks(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -63,6 +63,12 @@ export function createTask(data) {
 
 // Selectors
 const getTasks = prop('tasks');
+
+// Using a getItems selector to allow for freedom to change the internal
+// representation of the items in the state.
+const getItems = compose(prop('items'), getTasks);
+
 export const selectors = {
-  getTasks
+  getTasks,
+  getItems
 };

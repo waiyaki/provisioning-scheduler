@@ -22,28 +22,31 @@ class SchedulerContainer extends Component {
   }
 
   render() {
-    const { createTask: onSubmit, tasks } = this.props;
+    const { createTask: onSubmit, tasks, items, children } = this.props;
     return (
-      <Scheduler {...{ onSubmit, tasks }} />
+      <Scheduler {...{ onSubmit, tasks, items, children }} />
     );
   }
 }
 
 SchedulerContainer.propTypes = {
   auth: PropTypes.object.isRequired,
+  children: PropTypes.element,
   createTask: PropTypes.func.isRequired,
   fetchTasks: PropTypes.func.isRequired,
   error: PropTypes.object,
+  items: PropTypes.array.isRequired,
   tasks: PropTypes.object.isRequired
 };
 
 const { getAuth } = authSelectors;
-const { getTasks } = tasksSelectors;
+const { getTasks, getItems } = tasksSelectors;
 
 export default connect(
   state => ({
     auth: getAuth(state),
-    tasks: getTasks(state)
+    tasks: getTasks(state),
+    items: getItems(state)
   }),
   { createTask, fetchTasks }
 )(SchedulerContainer);

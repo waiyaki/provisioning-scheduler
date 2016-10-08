@@ -1,5 +1,4 @@
-import curry from 'lodash/fp/curry';
-import compose from 'lodash/fp/compose';
+import { curry, compose } from 'ramda';
 
 import { setAuthToken, removeAuthToken } from '../../utils';
 
@@ -17,7 +16,7 @@ const RESEND_EMAIL_REQUEST = 'scheduler/auth/RESEND_EMAIL_REQUEST';
 const RESEND_EMAIL_SUCCESS = 'scheduler/auth/RESEND_EMAIL_SUCCESS';
 const RESEND_EMAIL_FAILURE = 'scheduler/auth/RESEND_EMAIL_FAILURE';
 const LOGOUT = 'scheduler/auth/LOGOUT';
-const CLEAR_AUTH_ERRORS = 'CLEAR_AUTH_ERRORS';
+const CLEAR_AUTH_ERRORS = 'scheduler/auth/CLEAR_AUTH_ERRORS';
 
 // Reducer
 const initialState = {
