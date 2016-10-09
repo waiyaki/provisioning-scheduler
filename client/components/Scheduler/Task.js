@@ -8,7 +8,7 @@ export default function Task({ task: { activity, town, siteName, time, id } }) {
   return (
     <span>
       <ListItem
-        onTouchTap={() => browserHistory.push(`tasks/${id}`)}
+        onTouchTap={() => browserHistory.push(`/tasks/${id}`)}
         primaryText={activity}
         secondaryText={
           `In ${siteName}, ${town} at ${new Date(time).toLocaleTimeString()}`}

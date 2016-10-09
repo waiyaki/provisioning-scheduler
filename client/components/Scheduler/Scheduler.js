@@ -14,10 +14,10 @@ const Scheduler = (props) => (
       </h1>
       <Divider />
       <div className={`row ${styles.content}`}>
-        <div className='col-xs-12 col-md-4'>
-          <RecentTasks tasks={props.tasks} items={props.items} />
+        <div className='col-xs-12 col-sm-6 col-md-4'>
+          <RecentTasks items={props.items} tasks={props.tasks} />
         </div>
-        <div className='col-xs-12 col-md-8'>
+        <div className='col-xs-12 col-sm-6 col-md-8'>
           {React.cloneElement(props.children, { ...props })}
         </div>
       </div>

@@ -6,6 +6,7 @@ import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
 import Tasks from './Tasks';
 import { getComponent } from '../../utils';
+import styles from './styles.css';
 
 const RecentTasks = ({ tasks, items }) => (
   <Card zDepth={0} className={classNames({ 'full-height': !!items.length })}>
@@ -14,7 +15,7 @@ const RecentTasks = ({ tasks, items }) => (
       title="Today's Tasks"
     />
     <Divider />
-    <CardText>
+    <CardText className={styles.tasks}>
       {getComponent(
         <Tasks tasks={tasks.items} />,
         getComponent(

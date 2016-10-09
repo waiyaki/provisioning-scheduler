@@ -43,6 +43,16 @@
   display: none;
 }
 
+.editButton {
+  text-align: right;
+}
+
+.tasks {
+  max-height: 475px;
+  overflow: scroll;
+  padding-bottom: 2em;
+}
+
 @media (max-width: 768px) {
   .schedulerActions .content {
     display: none;
@@ -50,5 +60,11 @@
 
   .createTask {
     display: block;
+  }
+
+  .editButton {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
   }
 }
