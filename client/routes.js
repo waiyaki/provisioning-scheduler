@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import App from './App';
 import {
   SchedulerContainer, LoginContainer, RegisterContainer,
-  VerifyAccountContainer, LandingPageContainer
+  VerifyAccountContainer, LandingPageContainer, TaskDetailsContainer
 } from './containers';
 import { SchedulerActions, ScheduleTask } from './components';
 import { selectors as authSelectors } from './redux/modules/auth';
@@ -30,6 +30,7 @@ const Routes = ({ store }) => (
         <Route component={SchedulerContainer} onEnter={requireAuth(store)}>
           <Route component={SchedulerActions} path='/tasks' />
           <Route component={ScheduleTask} path='/tasks/create' />
+          <Route component={TaskDetailsContainer} path='/tasks/:taskId' />
         </Route>
         <Route path='/login' component={LoginContainer} />
         <Route path='/register' component={RegisterContainer} />

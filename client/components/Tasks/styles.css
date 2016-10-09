@@ -1,0 +1,11 @@
+.editButton {
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .editButton {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+  }
+}

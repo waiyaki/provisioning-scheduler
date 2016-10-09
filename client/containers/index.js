@@ -6,3 +6,5 @@ export {
   default as VerifyAccountContainer } from './Auth/VerifyAccountContainer';
 export {
   default as LandingPageContainer } from './LandingPage/LandingPageContainer';
+export {
+  default as TaskDetailsContainer } from './Tasks/TaskDetailsContainer';

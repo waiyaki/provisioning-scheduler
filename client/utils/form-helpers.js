@@ -1,10 +1,15 @@
 import { decamelize } from 'humps';
-
+import { compose, curry } from 'ramda'
 export function titleCase(str) {
   return str.split(' ').map(
     string => `${string.charAt(0).toUpperCase()}${string.slice(1)}`
   ).join(' ');
 }
+
+export const titleCaseAndDecamelize = compose(
+  titleCase,
+  curry((opts, s) => decamelize(s, opts))({ separator: ' ' })
+);
 
 export function constructRenderableFields(fields = []) {
   if (!Array.isArray(fields)) {
@@ -14,9 +19,7 @@ export function constructRenderableFields(fields = []) {
   return fields.map(field => ({
     ...field,
     type: field.type || 'text',
-    hintText: field.hintText || titleCase(decamelize(
-      field.name, { separator: ' ' }
-    ))
+    hintText: field.hintText || titleCaseAndDecamelize(field.name)
   }));
 }
 

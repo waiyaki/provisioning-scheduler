@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames';
 
 import Divider from 'material-ui/Divider';
 
