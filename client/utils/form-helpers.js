@@ -1,5 +1,6 @@
 import { decamelize } from 'humps';
-import { compose, curry } from 'ramda'
+import { compose, curry } from 'ramda';
+
 export function titleCase(str) {
   return str.split(' ').map(
     string => `${string.charAt(0).toUpperCase()}${string.slice(1)}`

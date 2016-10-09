@@ -10,6 +10,12 @@ import {
 import { Scheduler } from '../../components';
 
 class SchedulerContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
   componentDidMount() {
     this.props.fetchTasks();
   }
@@ -21,10 +27,18 @@ class SchedulerContainer extends Component {
     }
   }
 
+  onSubmit(data) {
+    const { createTask: submit } = this.props;
+    return submit(data)
+      .then(response => {
+        const { data: { id } } = response;
+        browserHistory.push(`tasks/${id}`);
+      });
+  }
   render() {
-    const { createTask: onSubmit, tasks, items, children } = this.props;
+    const { tasks, items, children } = this.props;
     return (
-      <Scheduler {...{ onSubmit, tasks, items, children }} />
+      <Scheduler {...{ onSubmit: this.onSubmit, tasks, items, children }} />
     );
   }
 }

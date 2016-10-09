@@ -72,6 +72,20 @@ export const selectors = {
 };
 
 // Actions
+const interceptAndDoSomething = (
+  onSucess,
+  onError = f => f,
+  apiCall
+) => (client) => apiCall(client)
+  .then(response => {
+    onSucess(response);
+    return response;
+  })
+  .catch(err => {
+    onError(err);
+    return Promise.reject(err);
+  });
+
 export function fetchTasks() {
   return (dispatch, getState) => {
     const items = getItems(getState());
@@ -96,10 +110,16 @@ export function fetchTask(taskId) {
   };
 }
 
+// This functin eventually returns a promise for easier chaining
+// in the components.
 export function createTask(data) {
-  return {
+  return (dispatch) => new Promise((resolve, reject) => dispatch({
     types: [CREATE_TASK_REQUEST, CREATE_TASK_SUCCESS, CREATE_TASK_FAILURE],
-    callApi: client => client.post('/api/scheduled-tasks', data),
+    callApi: interceptAndDoSomething(
+      resolve,
+      reject,
+      client => client.post('/api/scheduled-tasks', data)
+    ),
     meta: { authenticate: true }
-  };
+  }));
 }
