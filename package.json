@@ -9,7 +9,7 @@
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "prestart:dev": "npm run db:migrate",
     "prestart": "npm run db:migrate && npm run build",
-    "start:dev": "NODE_ENV=development ./node_modules/.bin/nodemon -w server -w webpack.config.js ./bin/www",
+    "start:dev": "NODE_ENV=development nodejs-dashboard nodemon -w server -w webpack.config.js ./bin/www",
     "start": "NODE_ENV=production && node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -36,6 +36,7 @@
     "eslint-plugin-react": "^5.2.2",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.22.0",
+    "nodejs-dashboard": "^0.1.0",
     "nodemon": "^1.9.2",
     "postcss-loader": "^0.13.0",
     "react-hot-loader": "^3.0.0-beta.2",
