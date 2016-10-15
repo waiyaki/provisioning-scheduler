@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import Divider from 'material-ui/Divider';
 
-import RecentTasks from './RecentTasks';
+import RecentTasks from '../Tasks/RecentTasks';
 
 import styles from './styles.css';
 

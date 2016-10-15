@@ -32,7 +32,7 @@ class SchedulerContainer extends Component {
     return submit(data)
       .then(response => {
         const { data: { id } } = response;
-        browserHistory.push(`tasks/${id}`);
+        browserHistory.push(`/tasks/${id}`);
       });
   }
   render() {

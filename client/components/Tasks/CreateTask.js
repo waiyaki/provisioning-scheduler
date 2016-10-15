@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
-import ScheduleTaskForm from './ScheduleTaskForm';
+import TaskForm from '../Tasks/TaskForm';
 
-const ScheduleTask = ({ onSubmit, tasks }) => (
+const CreateTask = ({ onSubmit, tasks }) => (
   <Card zDepth={0}>
     <CardTitle
       className='text-center'
@@ -12,14 +12,14 @@ const ScheduleTask = ({ onSubmit, tasks }) => (
     />
     <Divider />
     <CardText>
-      <ScheduleTaskForm {...{ onSubmit, tasks }} />
+      <TaskForm {...{ onSubmit, tasks }} />
     </CardText>
   </Card>
 );
 
-ScheduleTask.propTypes = {
+CreateTask.propTypes = {
   onSubmit: React.PropTypes.func,
   tasks: React.PropTypes.object
 };
 
-export default ScheduleTask;
+export default CreateTask;

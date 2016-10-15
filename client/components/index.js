@@ -6,5 +6,5 @@ export { default as LandingPage } from './LandingPage/LandingPage';
 
 export { default as Scheduler } from './Scheduler/Scheduler';
 export { default as SchedulerActions } from './Scheduler/SchedulerActions';
-export { default as ScheduleTask } from './Scheduler/ScheduleTask';
-export { default as TaskDetails } from './Scheduler/TaskDetails';
+export { default as CreateTask } from './Tasks/CreateTask';
+export { default as TaskDetails } from './Tasks/TaskDetails';

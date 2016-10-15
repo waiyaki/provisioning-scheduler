@@ -1,0 +1,31 @@
+.tasks {
+  max-height: 475px;
+  overflow: scroll;
+  padding-bottom: 2em;
+}
+
+.editButton {
+  text-align: right;
+}
+
+.submit {
+  margin-top: 1em;
+}
+
+.timePicker .submit {
+  text-align: left;
+}
+
+.error {
+  font-size: 0.8em;
+  color: #f00;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .editButton {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+  }
+}
