@@ -1,4 +1,4 @@
-import { prop, compose, propEq, find, curry } from 'ramda';
+import R from 'ramda';
 
 const INITIAL_STATE = {
   isFetching: false,
@@ -18,11 +18,19 @@ const FETCH_TASK_REQUEST = 'scheduler/tasks/FETCH_TASK_REQUEST';
 const FETCH_TASK_SUCCESS = 'scheduler/tasks/FETCH_TASK_SUCCESS';
 const FETCH_TASK_FAILURE = 'scheduler/tasks/FETCH_TASK_FAILURE';
 
+const UPDATE_TASK_REQUEST = 'scheduler/tasks/UPDATE_TASK_REQUEST';
+const UPDATE_TASK_SUCCESS = 'scheduler/tasks/UPDATE_TASK_SUCCESS';
+const UPDATE_TASK_FAILURE = 'scheduler/tasks/UPDATE_TASK_FAILURE';
+
+const updateItems = (item, items) =>
+  R.update(R.findIndex(R.propEq('id', item.id), items), item, items);
+
 export default function tasks(state = INITIAL_STATE, action) {
   switch (action.type) {
     case CREATE_TASK_REQUEST:
     case FETCH_TASKS_REQUEST:
     case FETCH_TASK_REQUEST:
+    case UPDATE_TASK_REQUEST:
       return { ...state, isFetching: true, error: null };
 
     case CREATE_TASK_SUCCESS:
@@ -34,9 +42,18 @@ export default function tasks(state = INITIAL_STATE, action) {
         items: [action.payload, ...state.items]
       };
 
+    case UPDATE_TASK_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        error: null,
+        items: updateItems(action.payload, state.items)
+      };
+
     case CREATE_TASK_FAILURE:
     case FETCH_TASKS_FAILURE:
     case FETCH_TASK_FAILURE:
+    case UPDATE_TASK_FAILURE:
       return { ...state, isFetching: false, error: action.error };
 
     case FETCH_TASKS_SUCCESS:
@@ -50,18 +67,17 @@ export default function tasks(state = INITIAL_STATE, action) {
 }
 
 // Selectors
-const getTasks = prop('tasks');
-const getPropFromTasks = curry((p, state) => compose(prop(p), getTasks)(state));
+const getTasks = R.prop('tasks');
+const getPropFromTasks = R.curry(
+  (p, state) => R.compose(R.prop(p), getTasks)(state)
+);
 
 // Using a getItems selector to allow for freedom to change the internal
 // representation of the items in the state.
 const getItems = getPropFromTasks('items');
 
-const getItemById = curry(
-  (taskId, state) => compose(
-    find(propEq('id', Number(taskId))),
-    getItems
-  )(state)
+const getItemById = R.curry((taskId, state) =>
+  R.compose(R.find(R.propEq('id', Number(taskId))), getItems)(state)
 );
 
 export const selectors = {
@@ -119,6 +135,20 @@ export function createTask(data) {
       resolve,
       reject,
       client => client.post('/api/scheduled-tasks', data)
+    ),
+    meta: { authenticate: true }
+  }));
+}
+
+export function updateTask(data) {
+  return (dispatch) => new Promise((resolve, reject) => dispatch({
+    types: [UPDATE_TASK_REQUEST, UPDATE_TASK_SUCCESS, UPDATE_TASK_FAILURE],
+    callApi: interceptAndDoSomething(
+      resolve,
+      reject,
+      client => client.put(
+        `/api/scheduled-tasks/${data.id}`, R.omit('user', data)
+      )
     ),
     meta: { authenticate: true }
   }));

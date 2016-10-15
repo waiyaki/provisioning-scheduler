@@ -43,6 +43,6 @@ export const renderTimePicker = ({
     floatingLabelText={label}
     errorText={meta.touched && meta.error}
     onChange={(_, date) => input.onChange(date)}
-    value={input.value}
+    value={new Date(input.value || Date.now())}
   />
 );

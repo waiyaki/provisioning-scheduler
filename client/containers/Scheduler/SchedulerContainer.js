@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 
 import { selectors as authSelectors } from '../../redux/modules/auth';
 import {
-  createTask, fetchTasks, selectors as tasksSelectors
+  createTask, fetchTasks, updateTask, selectors as tasksSelectors
 } from '../../redux/modules/tasks';
 
 import { Scheduler } from '../../components';
@@ -14,6 +14,7 @@ class SchedulerContainer extends Component {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.isCreate = this.isCreate.bind(this);
   }
 
   componentDidMount() {
@@ -28,13 +29,20 @@ class SchedulerContainer extends Component {
   }
 
   onSubmit(data) {
-    const { createTask: submit } = this.props;
+    const submit = this.isCreate()
+      ? this.props.createTask : this.props.updateTask;
     return submit(data)
       .then(response => {
         const { data: { id } } = response;
         browserHistory.push(`/tasks/${id}`);
       });
   }
+
+  isCreate() {
+    const { location: { pathname } } = this.props;
+    return pathname === '/tasks/create';
+  }
+
   render() {
     const { tasks, items, children } = this.props;
     return (
@@ -50,7 +58,9 @@ SchedulerContainer.propTypes = {
   fetchTasks: PropTypes.func.isRequired,
   error: PropTypes.object,
   items: PropTypes.array.isRequired,
-  tasks: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
+  tasks: PropTypes.object.isRequired,
+  updateTask: PropTypes.func.isRequired
 };
 
 const { getAuth } = authSelectors;
@@ -62,5 +72,5 @@ export default connect(
     tasks: getTasks(state),
     items: getItems(state)
   }),
-  { createTask, fetchTasks }
+  { createTask, fetchTasks, updateTask }
 )(SchedulerContainer);

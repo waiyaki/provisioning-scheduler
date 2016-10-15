@@ -29,7 +29,7 @@ const fields = constructRenderableFields(
 const firstHalf = fields.slice(0, fields.length / 2 + 1);
 const otherHalf = fields.slice(fields.length / 2 + 1);
 
-const ScheduleTaskForm = ({
+const TaskForm = ({
   handleSubmit, onSubmit, submitting, pristine, tasks
 }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
@@ -65,7 +65,7 @@ const ScheduleTaskForm = ({
   </form>
 );
 
-ScheduleTaskForm.propTypes = {
+TaskForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
@@ -74,9 +74,6 @@ ScheduleTaskForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'ScheduleTaskForm',
-  validate: validate(without(rawFields, 'engineer', 'engineersPhoneNumber')),
-  initialValues: {
-    time: new Date()
-  }
-})(ScheduleTaskForm);
+  form: 'TaskForm',
+  validate: validate(without(rawFields, 'engineer', 'engineersPhoneNumber'))
+})(TaskForm);

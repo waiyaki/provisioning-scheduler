@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import { compose, pickBy, omit, is, keys as toKeys } from 'ramda';
 
 import { Card, CardTitle, CardText } from 'material-ui/Card';
@@ -61,7 +62,9 @@ const TaskDetails = ({ task = {} }) => {
           </div>
         </List>
         <div className={styles.editButton}>
-          <FloatingActionButton>
+          <FloatingActionButton
+            onTouchTap={() => browserHistory.push(`/tasks/${task.id}/edit`)}
+          >
             <ModeEdit />
           </FloatingActionButton>
         </div>

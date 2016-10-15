@@ -8,3 +8,5 @@ export {
   default as LandingPageContainer } from './LandingPage/LandingPageContainer';
 export {
   default as TaskDetailsContainer } from './Scheduler/TaskDetailsContainer';
+
+export { default as EditTask } from './Tasks/EditTask';
