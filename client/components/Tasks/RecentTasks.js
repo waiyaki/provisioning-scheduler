@@ -4,7 +4,9 @@ import classNames from 'classnames';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
+
 import Tasks from './Tasks';
+import FetchTasksError from './FetchTasksError';
 import { getComponent } from '../../utils';
 import styles from './styles.css';
 
@@ -22,7 +24,11 @@ const RecentTasks = ({ tasks, items }) => (
           <div className='text-center'>
             <CircularProgress />
           </div>,
-          <h3 className='text-center'>You have no tasks today.</h3>,
+          getComponent(
+            <FetchTasksError error={tasks.error} />,
+            <h3 className='text-center'>You have no tasks today.</h3>,
+            [tasks.error && tasks.error.tasksFetchError]
+          ),
           [tasks.isFetching]
         ),
         [items.length]

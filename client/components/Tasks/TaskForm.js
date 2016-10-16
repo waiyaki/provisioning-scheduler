@@ -31,39 +31,42 @@ const otherHalf = fields.slice(fields.length / 2 + 1);
 
 const TaskForm = ({
   handleSubmit, onSubmit, submitting, pristine, tasks
-}) => (
-  <form onSubmit={handleSubmit(onSubmit)}>
-    {tasks.error && tasks.error.message && (
-      <div className={styles.error}>{tasks.error.message}</div>
-    )}
-    <div className='row text-center'>
-      <div className='col-xs-12 col-md-6'>
-        {renderFormFields(firstHalf, tasks)}
-      </div>
-      <div className='col-xs-12 col-md-6'>
-        {renderFormFields(otherHalf, tasks)}
-        <span key='time'>
-          <Field
-            name='time'
-            label='Time'
-            errorText={tasks.error && tasks.error.time}
-            component={renderTimePicker}
-          />
-        </span>
-      </div>
-    </div>
-    <div className='text-center'>
-      {submitting
-        ? <CircularProgress size={0.5} />
-        : <div className={styles.submit}>
-          <RaisedButton disabled={pristine} type='submit' primary>
-            Submit
-          </RaisedButton>
+}) => {
+  const { error: { submissionError } } = tasks;
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {submissionError && submissionError.message && (
+        <div className={styles.error}>{submissionError.message}</div>
+      )}
+      <div className='row text-center'>
+        <div className='col-xs-12 col-md-6'>
+          {renderFormFields(firstHalf, tasks)}
         </div>
-      }
-    </div>
-  </form>
-);
+        <div className='col-xs-12 col-md-6'>
+          {renderFormFields(otherHalf, tasks)}
+          <span key='time'>
+            <Field
+              name='time'
+              label='Time'
+              errorText={submissionError && submissionError.time}
+              component={renderTimePicker}
+            />
+          </span>
+        </div>
+      </div>
+      <div className='text-center'>
+        {submitting
+          ? <CircularProgress size={0.5} />
+          : <div className={styles.submit}>
+            <RaisedButton disabled={pristine} type='submit' primary>
+              Submit
+            </RaisedButton>
+          </div>
+        }
+      </div>
+    </form>
+  );
+};
 
 TaskForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

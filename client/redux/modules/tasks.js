@@ -3,7 +3,7 @@ import R from 'ramda';
 const INITIAL_STATE = {
   isFetching: false,
   items: [],
-  error: null
+  error: {}
 };
 
 const CREATE_TASK_REQUEST = 'scheduler/tasks/CREATE_TASK_REQUEST';
@@ -22,7 +22,7 @@ const UPDATE_TASK_REQUEST = 'scheduler/tasks/UPDATE_TASK_REQUEST';
 const UPDATE_TASK_SUCCESS = 'scheduler/tasks/UPDATE_TASK_SUCCESS';
 const UPDATE_TASK_FAILURE = 'scheduler/tasks/UPDATE_TASK_FAILURE';
 
-const updateItems = (item, items) =>
+const updateItem = (item, items) =>
   R.update(R.findIndex(R.propEq('id', item.id), items), item, items);
 
 export default function tasks(state = INITIAL_STATE, action) {
@@ -31,14 +31,13 @@ export default function tasks(state = INITIAL_STATE, action) {
     case FETCH_TASKS_REQUEST:
     case FETCH_TASK_REQUEST:
     case UPDATE_TASK_REQUEST:
-      return { ...state, isFetching: true, error: null };
+      return { ...state, isFetching: true };
 
     case CREATE_TASK_SUCCESS:
-    case FETCH_TASK_SUCCESS:
       return {
         ...state,
         isFetching: false,
-        error: null,
+        error: { ...state.error, submissionError: null },
         items: [action.payload, ...state.items]
       };
 
@@ -46,22 +45,43 @@ export default function tasks(state = INITIAL_STATE, action) {
       return {
         ...state,
         isFetching: false,
-        error: null,
-        items: updateItems(action.payload, state.items)
+        error: { ...state.error, submissionError: null },
+        items: updateItem(action.payload, state.items)
       };
 
-    case CREATE_TASK_FAILURE:
-    case FETCH_TASKS_FAILURE:
     case FETCH_TASK_FAILURE:
+      return R.merge(state, {
+        isFetching: false,
+        error: { ...state.error, taskFetchError: action.error }
+      });
+
+    case FETCH_TASKS_FAILURE:
+      return R.merge(state, {
+        isFetching: false,
+        error: { ...state.error, tasksFetchError: action.error }
+      });
+
+    case CREATE_TASK_FAILURE:
     case UPDATE_TASK_FAILURE:
-      return { ...state, isFetching: false, error: action.error };
+      return R.merge(state, {
+        isFetching: false,
+        error: { submissionError: action.error }
+      });
 
     case FETCH_TASKS_SUCCESS:
       return {
         ...state,
         isFetching: false,
         items: [...action.payload, ...state.items],
-        error: null
+        error: { ...state.error, tasksFetchError: null }
+      };
+
+    case FETCH_TASK_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        items: [action.payload, ...state.items],
+        error: { ...state.error, taskFetchError: null }
       };
 
     default:

@@ -22,6 +22,11 @@
   text-align: left;
 }
 
+.fetchError {
+  color: #f00;
+  font-size: 1.17em;
+}
+
 @media (max-width: 768px) {
   .editButton {
     position: fixed;

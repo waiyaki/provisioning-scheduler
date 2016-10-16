@@ -18,13 +18,13 @@ export const validate = requiredFields => values => {
 };
 
 export const renderFormFields = (
-  formFields, scheduler
+  formFields, { error: { submissionError } }
 ) => formFields.map((field, index) => (
   <span key={index}>
     <Field
       {...field}
       errorStyle={inlineStyles.errorStyle}
-      errorText={scheduler.error && scheduler.error[field.name]}
+      errorText={submissionError && submissionError[field.name]}
       floatingLabelText={field.hintText}
       fullWidth
       component={TextField}
@@ -32,17 +32,23 @@ export const renderFormFields = (
   </span>
 ));
 
+const toDateOrNull = string => (
+  new Date(string).toString() !== 'Invalid Date'
+    ? new Date(string)
+    : null
+);
+
 export const renderTimePicker = ({
   // eslint-disable-next-line react/prop-types
-  label, meta, input
+  label, meta, input, errorText
 }) => (
   <TimePicker
     fullWidth
     hintText={label}
     format='24hr'
     floatingLabelText={label}
-    errorText={meta.touched && meta.error}
+    errorText={meta.error || errorText}
     onChange={(_, date) => input.onChange(date)}
-    value={new Date(input.value || Date.now())}
+    value={toDateOrNull(input.value)}
   />
 );

@@ -10,3 +10,4 @@ export { default as SchedulerActions } from './Scheduler/SchedulerActions';
 export { default as CreateTask } from './Tasks/CreateTask';
 export { default as UpdateTask } from './Tasks/UpdateTask';
 export { default as TaskDetails } from './Tasks/TaskDetails';
+export { default as FetchTaskError } from './Tasks/FetchTaskError';
