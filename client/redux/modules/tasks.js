@@ -58,7 +58,10 @@ export default function tasks(state = INITIAL_STATE, action) {
 
     case FETCH_TASKS_SUCCESS:
       return {
-        ...state, isFetching: false, items: action.payload, error: null
+        ...state,
+        isFetching: false,
+        items: [...action.payload, ...state.items],
+        error: null
       };
 
     default:

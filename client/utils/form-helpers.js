@@ -7,7 +7,7 @@ export function titleCase(str) {
   ).join(' ');
 }
 
-export const titleCaseAndDecamelize = compose(
+export const decamelizeAndTitleCase = compose(
   titleCase,
   curry((opts, s) => decamelize(s, opts))({ separator: ' ' })
 );
@@ -20,7 +20,7 @@ export function constructRenderableFields(fields = []) {
   return fields.map(field => ({
     ...field,
     type: field.type || 'text',
-    hintText: field.hintText || titleCaseAndDecamelize(field.name)
+    hintText: field.hintText || decamelizeAndTitleCase(field.name)
   }));
 }
 

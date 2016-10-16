@@ -8,7 +8,7 @@ import Divider from 'material-ui/Divider';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
-import { titleCaseAndDecamelize } from '../../utils';
+import { decamelizeAndTitleCase } from '../../utils';
 import styles from './styles.css';
 
 const intoHalves = xs => ({
@@ -26,7 +26,7 @@ const halves = compose(
 const renderHalf = (task, half) => half.map(key => (
   <ListItem
     disabled
-    primaryText={titleCaseAndDecamelize(key)}
+    primaryText={decamelizeAndTitleCase(key)}
     secondaryText={task[key]}
     key={key}
   />

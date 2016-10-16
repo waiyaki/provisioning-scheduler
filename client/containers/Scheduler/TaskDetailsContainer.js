@@ -8,6 +8,11 @@ import { TaskDetails } from '../../components';
 import { getComponent } from '../../utils';
 
 class TaskDetailsContainer extends Component {
+  componentDidMount() {
+    const { params: { taskId } } = this.props;
+    this.props.fetchTask(taskId);
+  }
+
   render() {
     const { task, isFetching } = this.props;
     return getComponent(
