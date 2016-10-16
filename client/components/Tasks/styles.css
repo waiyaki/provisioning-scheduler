@@ -33,4 +33,8 @@
     right: 24px;
     bottom: 24px;
   }
+
+  .createButton {
+    display: none;
+  }
 }

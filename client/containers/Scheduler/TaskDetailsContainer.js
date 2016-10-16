@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import delay from 'lodash/delay';
 
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -10,7 +11,9 @@ import { getComponent } from '../../utils';
 class TaskDetailsContainer extends Component {
   componentDidMount() {
     const { params: { taskId } } = this.props;
-    this.props.fetchTask(taskId);
+    // Delaying this fetch to allow `fetchTasks` to be dispatched first.
+    // We don't refetch data if `fetchTasks` has already fetched.
+    delay(() => this.props.fetchTask(taskId), 1000);
   }
 
   render() {

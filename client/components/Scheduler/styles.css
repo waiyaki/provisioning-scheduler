@@ -7,11 +7,11 @@
   padding-top: 1em;
 }
 
-.createTask {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  display: none;
+.createFabButton {
+  text-align: right;
+  position: relative;
+  right: 12px;
+  bottom: 50px;
 }
 
 .schedulerActions {
@@ -30,7 +30,9 @@
     display: none;
   }
 
-  .createTask {
-    display: block;
+  .createFabButton {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
   }
 }
