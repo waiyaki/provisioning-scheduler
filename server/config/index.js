@@ -10,10 +10,10 @@ const mailConfig = {
   from: 'Provisioning Scheduler <no-reply.notifications@provisioning-scheduler>',
   signature: 'Provisioning Scheduler Team',
   smtp: {
-    service: 'Mailgun',
+    service: process.env.MAIL_SERVICE,
     auth: {
-      user: process.env.MAILGUN_USER,
-      pass: process.env.MAILGUN_APIKEY
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_APIKEY
     }
   }
 };

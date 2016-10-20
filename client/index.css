@@ -2,7 +2,6 @@ body {
   background-color: #F5F8FA;
   font-family: Roboto;
   height: 100%;
-  width: 100%;
 }
 
 :global .text-center {
