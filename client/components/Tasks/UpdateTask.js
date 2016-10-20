@@ -5,7 +5,7 @@ import Divider from 'material-ui/Divider';
 import TaskForm from '../Tasks/TaskForm';
 
 const UpdateTask = ({ onSubmit, tasks, task = {}, ...rest }) => (
-  <Card zDepth={0}>
+  <Card>
     <CardTitle
       className='text-center'
       title={`Update Task ${task.activity || ''}`}

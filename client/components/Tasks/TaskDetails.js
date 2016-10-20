@@ -43,7 +43,7 @@ const renderTime = time => (
 const TaskDetails = ({ task = {} }) => {
   const keys = halves(task);
   return (
-    <Card zDepth={0}>
+    <Card>
       <CardTitle
         className='text-center'
         title={task.activity}

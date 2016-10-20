@@ -56,7 +56,7 @@ const TaskForm = ({
       </div>
       <div className='text-center'>
         {submitting
-          ? <CircularProgress size={0.5} />
+          ? <CircularProgress />
           : <div className={styles.submit}>
             <RaisedButton disabled={pristine} type='submit' primary>
               Submit

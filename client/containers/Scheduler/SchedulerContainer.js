@@ -43,10 +43,23 @@ class SchedulerContainer extends Component {
     return pathname === '/tasks/create';
   }
 
+  isAtHome() {
+    const { location: { pathname } } = this.props;
+    return /\/tasks\/?$/.test(pathname);
+  }
+
   render() {
     const { tasks, items, children } = this.props;
     return (
-      <Scheduler {...{ onSubmit: this.onSubmit, tasks, items, children }} />
+      <Scheduler
+        {...{
+          onSubmit: this.onSubmit,
+          isAtHome: this.isAtHome(),
+          tasks,
+          items,
+          children
+        }}
+      />
     );
   }
 }

@@ -12,12 +12,16 @@ import styles from './styles.css';
 const Scheduler = (props) => (
   <div className='row'>
     <div className='col-xs-12 col-lg-10 col-lg-offset-1'>
-      <h1 className={`text-center ${styles.heading}`}>
-        Provisioning Scheduler
-      </h1>
-      <Divider />
+      <div className={`${styles['hide-xs']}`}>
+        <h1 className={`text-center ${styles.heading}`}>
+          Provisioning Scheduler
+        </h1>
+        <Divider />
+      </div>
       <div className={`row ${styles.content}`}>
-        <div className='col-xs-12 col-sm-6 col-md-4'>
+        <div
+          className={`col-xs-12 col-sm-6 col-md-4 ${!props.isAtHome && styles['hide-xs']}`}
+        >
           <RecentTasks items={props.items} tasks={props.tasks} />
           <div className={styles.createFabButton}>
             <FloatingActionButton
@@ -38,6 +42,7 @@ const Scheduler = (props) => (
 
 Scheduler.propTypes = {
   children: PropTypes.node,
+  isAtHome: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,
   tasks: PropTypes.object.isRequired

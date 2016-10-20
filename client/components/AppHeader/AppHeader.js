@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { browserHistory, Link } from 'react-router';
+import { Link } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
@@ -13,7 +13,7 @@ const inlineStyles = {
   }
 };
 
-const AppHeader = ({ auth, logout }) => (
+const AppHeader = ({ auth, logout, toggleDrawer, navigate }) => (
   <AppBar
     className={styles.appHeader}
     title={
@@ -28,16 +28,20 @@ const AppHeader = ({ auth, logout }) => (
       />
       : <FlatButton
         label='Login'
-        onTouchTap={() => browserHistory.push('/login')}
+        onTouchTap={() => navigate('/login', false)}
       />
     }
+    onLeftIconButtonTouchTap={toggleDrawer}
     style={inlineStyles.appHeader}
+    showMenuIconButton={auth.isAuthenticated}
   />
 );
 
 AppHeader.propTypes = {
   auth: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
+  navigate: PropTypes.func.isRequired
 };
 
 export default AppHeader;

@@ -11,7 +11,7 @@ import { getComponent } from '../../utils';
 import styles from './styles.css';
 
 const RecentTasks = ({ tasks, items }) => (
-  <Card zDepth={0} className={classNames({ 'full-height': !!items.length })}>
+  <Card className={classNames({ 'full-height': !!items.length })}>
     <CardTitle
       className='text-center'
       title="Today's Tasks"

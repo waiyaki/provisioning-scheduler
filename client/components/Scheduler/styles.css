@@ -35,4 +35,8 @@
     bottom: 24px;
     right: 24px;
   }
+
+  .hide-xs {
+    display: none;
+  }
 }

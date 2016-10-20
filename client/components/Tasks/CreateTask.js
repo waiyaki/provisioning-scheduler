@@ -5,7 +5,7 @@ import Divider from 'material-ui/Divider';
 import TaskForm from '../Tasks/TaskForm';
 
 const CreateTask = ({ onSubmit, tasks }) => (
-  <Card zDepth={0}>
+  <Card>
     <CardTitle
       className='text-center'
       title='Schedule a New Task'

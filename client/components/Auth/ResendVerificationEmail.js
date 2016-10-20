@@ -45,7 +45,7 @@ const ResendVerificationEmail = ({
     ))}
     <div className={`${authStyles.submit} text-center`}>
       {submitting
-        ? <CircularProgress size={0.5} />
+        ? <CircularProgress />
         : <RaisedButton disabled={pristine} type='submit' primary>
           Resend
         </RaisedButton>

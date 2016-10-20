@@ -35,7 +35,7 @@ const Login = ({ handleSubmit, pristine, submitting, login, auth }) => (
       ))}
       <div className={`${authStyles.submit} text-center`}>
         {submitting
-          ? <CircularProgress size={0.5} />
+          ? <CircularProgress />
           : <div>
             <RaisedButton disabled={pristine} type='submit' primary>
               Login
