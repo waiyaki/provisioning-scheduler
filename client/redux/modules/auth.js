@@ -1,8 +1,17 @@
-import { curry, compose } from 'ramda';
+import R from 'ramda';
 
-import { setAuthToken, removeAuthToken } from '../../utils';
+import { setAuthToken } from '../../utils';
 
-// Action types.
+const initialState = {
+  isAuthenticated: false,
+  isFetching: false,
+  user: null
+};
+
+
+// /////////////////////////////////////////////////////////////// //
+//                            Actions Types                        //
+// /////////////////////////////////////////////////////////////// //
 const LOGIN_REQUEST = 'scheduler/auth/LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'scheduler/auth/LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'scheduler/auth/LOGIN_FAILURE';
@@ -15,16 +24,12 @@ const VERIFY_ACCOUNT_FAILURE = 'scheduler/auth/VERIFY_ACCOUNT_FAILURE';
 const RESEND_EMAIL_REQUEST = 'scheduler/auth/RESEND_EMAIL_REQUEST';
 const RESEND_EMAIL_SUCCESS = 'scheduler/auth/RESEND_EMAIL_SUCCESS';
 const RESEND_EMAIL_FAILURE = 'scheduler/auth/RESEND_EMAIL_FAILURE';
-const LOGOUT = 'scheduler/auth/LOGOUT';
 const CLEAR_AUTH_ERRORS = 'scheduler/auth/CLEAR_AUTH_ERRORS';
 
-// Reducer
-const initialState = {
-  isAuthenticated: false,
-  isFetching: false,
-  user: null
-};
 
+// /////////////////////////////////////////////////////////////// //
+//                           Reducer                               //
+// /////////////////////////////////////////////////////////////// //
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case RESEND_EMAIL_REQUEST:
@@ -64,9 +69,6 @@ export default function reducer(state = initialState, action) {
         error: action.error
       };
 
-    case LOGOUT:
-      return initialState;
-
     case CLEAR_AUTH_ERRORS:
       return {
         ...state,
@@ -79,7 +81,10 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-// Actions
+
+// /////////////////////////////////////////////////////////////// //
+//                              Actions                            //
+// /////////////////////////////////////////////////////////////// //
 const interceptAndSaveAuthToken = apiCall => client => (
   apiCall(client)
     .then(response => {
@@ -102,13 +107,6 @@ export function register(data) {
   return {
     types: [REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILURE],
     callApi: client => client.post('/api/users', data)
-  };
-}
-
-export function logout() {
-  removeAuthToken();
-  return {
-    type: LOGOUT
   };
 }
 
@@ -138,10 +136,12 @@ export function clearAuthErrors() {
   };
 }
 
-// Selectors.
-const getProp = curry((prop, object) => object[prop]);
-const getAuth = getProp('auth');
-const getUser = compose(getProp('user'), getAuth);
+
+// /////////////////////////////////////////////////////////////// //
+//                              Selectors                          //
+// /////////////////////////////////////////////////////////////// //
+const getAuth = R.compose(R.prop('auth'), R.prop('scheduler'));
+const getUser = R.compose(R.prop('user'), getAuth);
 
 export const selectors = {
   getUser,

@@ -15,10 +15,12 @@ const injectTap = once(injectTapEventPlugin);
 injectTap();
 
 const store = createStore({
-  auth: {
-    isAuthenticated: !!getAuthToken(),
-    isFetching: false,
-    user: parseUserFromToken()
+  scheduler: {
+    auth: {
+      isAuthenticated: !!getAuthToken(),
+      isFetching: false,
+      user: parseUserFromToken()
+    }
   }
 });
 

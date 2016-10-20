@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { AppHeader } from '../../components';
-import { logout, selectors as authSelectors } from '../../redux/modules/auth';
+import { selectors as authSelectors } from '../../redux/modules/auth';
+import { logout } from '../../redux/modules/reducer';
 
 class AppHeaderContainer extends Component {
   render() {

@@ -6,6 +6,9 @@ const INITIAL_STATE = {
   error: {}
 };
 
+// /////////////////////////////////////////////////////////////// //
+//                            Actions Types                        //
+// /////////////////////////////////////////////////////////////// //
 const CREATE_TASK_REQUEST = 'scheduler/tasks/CREATE_TASK_REQUEST';
 const CREATE_TASK_SUCCESS = 'scheduler/tasks/CREATE_TASK_SUCCESS';
 const CREATE_TASK_FAILURE = 'scheduler/tasks/CREATE_TASK_FAILURE';
@@ -22,10 +25,18 @@ const UPDATE_TASK_REQUEST = 'scheduler/tasks/UPDATE_TASK_REQUEST';
 const UPDATE_TASK_SUCCESS = 'scheduler/tasks/UPDATE_TASK_SUCCESS';
 const UPDATE_TASK_FAILURE = 'scheduler/tasks/UPDATE_TASK_FAILURE';
 
+
+// /////////////////////////////////////////////////////////////// //
+//                        Reducer Helper Functions                 //
+// /////////////////////////////////////////////////////////////// //
 const updateItem = (item, items) =>
   R.update(R.findIndex(R.propEq('id', item.id), items), item, items);
 
-export default function tasks(state = INITIAL_STATE, action) {
+
+// /////////////////////////////////////////////////////////////// //
+//                           Reducer                               //
+// /////////////////////////////////////////////////////////////// //
+export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case CREATE_TASK_REQUEST:
     case FETCH_TASKS_REQUEST:
@@ -89,10 +100,13 @@ export default function tasks(state = INITIAL_STATE, action) {
   }
 }
 
-// Selectors
-const getTasks = R.prop('tasks');
+
+// /////////////////////////////////////////////////////////////// //
+//                              Selectors                          //
+// /////////////////////////////////////////////////////////////// //
+const getTasks = R.compose(R.prop('tasks'), R.prop('scheduler'));
 const getPropFromTasks = R.curry(
-  (p, state) => R.compose(R.prop(p), getTasks)(state)
+  (property, state) => R.compose(R.prop(property), getTasks)(state)
 );
 
 // Using a getItems selector to allow for freedom to change the internal
@@ -110,7 +124,10 @@ export const selectors = {
   getPropFromTasks
 };
 
-// Actions
+
+// /////////////////////////////////////////////////////////////// //
+//                              Actions                            //
+// /////////////////////////////////////////////////////////////// //
 const interceptAndDoSomething = (
   onSucess,
   onError = f => f,
