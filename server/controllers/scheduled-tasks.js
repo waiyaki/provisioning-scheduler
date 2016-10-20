@@ -123,40 +123,59 @@ function list(req, res) {
 
 function retrieve(req, res) {
   const { taskId } = req.params;
-  return findAndPopulate({ value: taskId })
-    .then(task => {
-      if (!task) {
-        return handleErrors.send(res, {
-          message: `Task id ${taskId} doesn't exist.`
-        });
+  return findAndPopulate({
+    value: taskId,
+    q: {
+      where: {
+        userId: req.user.id
       }
-      return res.status(200).send(task.toJSON());
-    })
-    .catch(error => {
-      logger.error('Error getting single task taskId: ', req.params.taskId, error);
-      return handleErrors.resolve(res, error);
-    });
+    }
+  })
+  .then(task => {
+    if (!task) {
+      return handleErrors.send(res, {
+        message: `Task id ${taskId} doesn't exist.`
+      });
+    }
+    return res.status(200).send(task.toJSON());
+  })
+  .catch(error => {
+    logger.error('Error getting single task taskId: ', req.params.taskId, error);
+    return handleErrors.resolve(res, error);
+  });
 }
 
 function update(req, res) {
   const { taskId } = req.params;
 
-  return findAndPopulate({ value: taskId })
-    .then(task => {
-      const data = req.body;
-      return task.update(
-        data, { fields: Object.keys(data) }
-      )
-      .then(() => res.status(200).send(task))
-      .catch(error => {
-        logger.error('Error updating task: ', taskId, error);
-        return handleErrors.resolve(res, error);
+  return findAndPopulate({
+    value: taskId,
+    q: {
+      where: {
+        userId: req.user.id
+      }
+    }
+  })
+  .then(task => {
+    if (!task) {
+      return handleErrors.send(res, {
+        message: `Task id ${taskId} doesn't exist or you don't have permission to update it.`
       });
-    })
+    }
+    const data = req.body;
+    return task.update(
+      data, { fields: Object.keys(data) }
+    )
+    .then(() => res.status(200).send(task))
     .catch(error => {
-      logger.error('Error getting single task taskId: ', req.params.taskId, error);
+      logger.error('Error updating task: ', taskId, error);
       return handleErrors.resolve(res, error);
     });
+  })
+  .catch(error => {
+    logger.error('Error getting single task taskId: ', req.params.taskId, error);
+    return handleErrors.resolve(res, error);
+  });
 }
 
 module.exports = {
