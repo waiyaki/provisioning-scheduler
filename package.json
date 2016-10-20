@@ -8,7 +8,7 @@
     "postinstall": "npm run build",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "prestart:dev": "npm run db:migrate",
-    "prestart": "npm run db:migrate && npm run build",
+    "prestart": "npm run db:migrate",
     "start:dev": "NODE_ENV=development nodejs-dashboard nodemon -w server -w webpack.config.js ./bin/www",
     "start": "NODE_ENV=production && node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -83,6 +83,6 @@
     "sequelize": "^3.23.6"
   },
   "engines": {
-    "node": "6.3.0"
+    "node": "6.8.1"
   }
 }
