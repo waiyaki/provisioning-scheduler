@@ -6,7 +6,14 @@ const config = require('../config');
 const { schema, options } = require('./schemas/user-schema');
 
 module.exports = (sequelize, DataTypes) => {
-  const userSchema = schema(DataTypes);
+  const additionalFields = {
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
+  };
+
+  const userSchema = merge({}, schema(DataTypes), additionalFields);
 
   const modelOptions = merge({}, options, {
     tableName: 'users',
@@ -19,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
         return jwt.sign({
           id: this.id,
           username: this.username,
-          exp: parseInt(expiry.getTime() / 1000, 10)
+          exp: parseInt(expiry.getTime() / 1000, 10),
+          isAdmin: this.isAdmin
         }, config.SECRET_KEY);
       },
 
