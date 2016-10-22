@@ -22,14 +22,21 @@ const AppHeader = ({ auth, logout, toggleDrawer, navigate }) => (
       </Link>
     }
     iconElementRight={auth.isAuthenticated
-      ? <FlatButton
+      ?
+      <FlatButton
         label='Logout'
         onTouchTap={logout}
       />
-      : <FlatButton
-        label='Login'
-        onTouchTap={() => navigate('/login', false)}
-      />
+      :
+      <div>
+        {auth.user && auth.user.isAdmin && (
+          <Link to='/admin/'>Admin Dashboard</Link>
+        )}
+        <FlatButton
+          label='Login'
+          onTouchTap={() => navigate('/login', false)}
+        />
+      </div>
     }
     onLeftIconButtonTouchTap={toggleDrawer}
     style={inlineStyles.appHeader}

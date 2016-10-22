@@ -128,7 +128,7 @@ export const selectors = {
 // /////////////////////////////////////////////////////////////// //
 //                              Actions                            //
 // /////////////////////////////////////////////////////////////// //
-const interceptAndDoSomething = (
+const intercept = (
   onSucess,
   onError = f => f,
   apiCall
@@ -171,7 +171,7 @@ export function fetchTask(taskId) {
 export function createTask(data) {
   return (dispatch) => new Promise((resolve, reject) => dispatch({
     types: [CREATE_TASK_REQUEST, CREATE_TASK_SUCCESS, CREATE_TASK_FAILURE],
-    callApi: interceptAndDoSomething(
+    callApi: intercept(
       resolve,
       reject,
       client => client.post('/api/scheduled-tasks', data)
@@ -183,7 +183,7 @@ export function createTask(data) {
 export function updateTask(data) {
   return (dispatch) => new Promise((resolve, reject) => dispatch({
     types: [UPDATE_TASK_REQUEST, UPDATE_TASK_SUCCESS, UPDATE_TASK_FAILURE],
-    callApi: interceptAndDoSomething(
+    callApi: intercept(
       resolve,
       reject,
       client => client.put(

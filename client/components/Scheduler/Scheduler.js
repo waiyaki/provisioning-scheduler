@@ -48,4 +48,11 @@ Scheduler.propTypes = {
   tasks: PropTypes.object.isRequired
 };
 
+Scheduler.defaultProps = {
+  isAtHome: true,
+  items: [],
+  tasks: {},
+  onSubmit() {}
+};
+
 export default Scheduler;

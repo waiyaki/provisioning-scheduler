@@ -7,8 +7,6 @@ import {
   createTask, fetchTasks, updateTask, selectors as tasksSelectors
 } from '../../redux/modules/tasks';
 
-import { Scheduler } from '../../components';
-
 class SchedulerContainer extends Component {
   constructor(props) {
     super(props);
@@ -50,17 +48,12 @@ class SchedulerContainer extends Component {
 
   render() {
     const { tasks, items, children } = this.props;
-    return (
-      <Scheduler
-        {...{
-          onSubmit: this.onSubmit,
-          isAtHome: this.isAtHome(),
-          tasks,
-          items,
-          children
-        }}
-      />
-    );
+    return React.cloneElement(children, {
+      onSubmit: this.onSubmit,
+      isAtHome: this.isAtHome(),
+      tasks,
+      items
+    });
   }
 }
 

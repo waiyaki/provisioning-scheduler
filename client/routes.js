@@ -8,7 +8,9 @@ import {
   VerifyAccountContainer, LandingPageContainer, TaskDetailsContainer,
   EditTask
 } from './containers';
-import { SchedulerActions, CreateTask } from './components';
+import { SchedulerActions, CreateTask, Scheduler } from './components';
+import Admin from './components/admin';
+
 import { selectors as authSelectors } from './redux/modules/auth';
 
 const { getAuth, getUser } = authSelectors;
@@ -29,10 +31,13 @@ const Routes = ({ store }) => (
       <Route path='/' component={App}>
         <IndexRedirect to='/welcome' />
         <Route component={SchedulerContainer} onEnter={requireAuth(store)}>
-          <Route component={SchedulerActions} path='/tasks' />
-          <Route component={CreateTask} path='/tasks/create' />
-          <Route component={TaskDetailsContainer} path='/tasks/:taskId' />
-          <Route component={EditTask} path='/tasks/:taskId/edit' />
+          <Route component={Scheduler}>
+            <Route component={SchedulerActions} path='/tasks' />
+            <Route component={CreateTask} path='/tasks/create' />
+            <Route component={TaskDetailsContainer} path='/tasks/:taskId' />
+            <Route component={EditTask} path='/tasks/:taskId/edit' />
+          </Route>
+          <Route component={Admin} path='/admin' />
         </Route>
         <Route path='/login' component={LoginContainer} />
         <Route path='/register' component={RegisterContainer} />
