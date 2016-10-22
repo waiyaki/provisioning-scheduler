@@ -25,6 +25,16 @@ const requireAuth = store => (nextState, replace) => {
   }
 };
 
+const requireAdmin = store => (nextState, replace) => {
+  const state = store.getState();
+  const { isAuthenticated } = getAuth(state);
+  const user = getUser(state);
+
+  if (!(isAuthenticated && user && user.isAdmin)) {
+    replace('/welcome');
+  }
+};
+
 const Routes = ({ store }) => (
   <Provider store={store}>
     <Router history={browserHistory}>
@@ -37,7 +47,7 @@ const Routes = ({ store }) => (
             <Route component={TaskDetailsContainer} path='/tasks/:taskId' />
             <Route component={EditTask} path='/tasks/:taskId/edit' />
           </Route>
-          <Route component={Admin} path='/admin' />
+          <Route component={Admin} path='/admin' onEnter={requireAdmin(store)} />
         </Route>
         <Route path='/login' component={LoginContainer} />
         <Route path='/register' component={RegisterContainer} />

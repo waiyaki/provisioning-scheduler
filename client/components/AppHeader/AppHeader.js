@@ -3,6 +3,10 @@ import { Link } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import styles from './appHeaderStyles.css';
 const inlineStyles = {
@@ -23,20 +27,24 @@ const AppHeader = ({ auth, logout, toggleDrawer, navigate }) => (
     }
     iconElementRight={auth.isAuthenticated
       ?
-      <FlatButton
-        label='Logout'
-        onTouchTap={logout}
-      />
-      :
-      <div>
+      <IconMenu
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
         {auth.user && auth.user.isAdmin && (
-          <Link to='/admin/'>Admin Dashboard</Link>
+          <MenuItem
+            primaryText='Admin Dashboard'
+            onTouchTap={() => navigate('/admin/', false)}
+          />
         )}
-        <FlatButton
-          label='Login'
-          onTouchTap={() => navigate('/login', false)}
-        />
-      </div>
+        <MenuItem primaryText='Sign out' onTouchTap={logout} />
+      </IconMenu>
+      :
+      <FlatButton
+        label='Login'
+        onTouchTap={() => navigate('/login', false)}
+      />
     }
     onLeftIconButtonTouchTap={toggleDrawer}
     style={inlineStyles.appHeader}
