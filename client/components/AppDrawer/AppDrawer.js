@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import Home from 'material-ui/svg-icons/action/home';
 import Create from 'material-ui/svg-icons/content/create';
+import AppBar from 'material-ui/AppBar';
 
 const AppDrawer = ({ open, onRequestChange, navigate }) => (
   <Drawer
@@ -13,9 +14,8 @@ const AppDrawer = ({ open, onRequestChange, navigate }) => (
     open={open}
     onRequestChange={onRequestChange}
   >
+    <AppBar title='Provisioning Scheduler' showMenuIconButton={false} />
     <Menu>
-      <MenuItem disabled>Provisioning Scheduler</MenuItem>
-      <Divider />
       <MenuItem
         primaryText='Home'
         leftIcon={<Home />}

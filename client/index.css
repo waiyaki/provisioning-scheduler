@@ -11,3 +11,10 @@ body {
 :global .full-height {
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  :global .container-fluid {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+}
