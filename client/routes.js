@@ -9,7 +9,9 @@ import {
   EditTask
 } from './containers';
 import { SchedulerActions, CreateTask, Scheduler } from './components';
-import Admin from './components/Admin';
+import {
+  AdminPageContainer, TasksContainer
+} from './containers/admin';
 
 import { selectors as authSelectors } from './redux/modules/auth';
 
@@ -47,10 +49,11 @@ const Routes = ({ store }) => (
             <Route component={EditTask} path='/tasks/:taskId/edit' />
           </Route>
           <Route
-            component={Admin}
-            path='/dashboard'
+            component={AdminPageContainer}
             onEnter={requireAdmin(store)}
-          />
+          >
+            <Route component={TasksContainer} path='/dashboard' />
+          </Route>
         </Route>
         <Route path='/login' component={LoginContainer} />
         <Route path='/register' component={RegisterContainer} />
