@@ -64,15 +64,6 @@ const options = {
     comparePassword(password) {
       return bcrypt.compareSync(password, this.password);
     }
-  },
-
-  hooks: {
-    afterValidate(instance) {
-      if (instance.changed('password')) {
-        logger.info('Hashing password for %s', instance.username);
-        instance.set('password', bcrypt.hashSync(instance.get('password')));
-      }
-    }
   }
 };
 

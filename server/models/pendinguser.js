@@ -1,6 +1,8 @@
 /* eslint-disable new-cap */
 const jwt = require('jsonwebtoken');
 const merge = require('lodash/merge');
+const logger = require('logfilename')(__filename);
+const bcrypt = require('bcrypt-nodejs');
 
 const config = require('../config');
 const { schema, options } = require('./schemas/user-schema');
@@ -45,6 +47,15 @@ module.exports = (sequelize, DataTypes) => {
         delete values.password;
         delete values.verificationToken;
         return values;
+      }
+    },
+
+    hooks: {
+      afterValidate(instance) {
+        if (instance.changed('password')) {
+          logger.info('Hashing password for %s', instance.username);
+          instance.set('password', bcrypt.hashSync(instance.get('password')));
+        }
       }
     }
   });
