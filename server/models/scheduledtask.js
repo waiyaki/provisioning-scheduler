@@ -8,6 +8,15 @@ const validatePhoneNumber = (number) => {
 };
 
 module.exports = (sequelize, DataTypes) => {
+  const additionalFields = {
+    status: {
+      type: DataTypes.STRING
+    },
+    doneBy: {
+      type: DataTypes.STRING
+    }
+  };
+
   const overrides = {
     engineersPhoneNumber: {
       type: DataTypes.STRING,
@@ -33,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   const scheduledTasksSchema = Object.assign(
-    {}, scheduledTasksSchemaFunc(DataTypes), overrides
+    {}, scheduledTasksSchemaFunc(DataTypes), additionalFields, overrides
   );
 
   const ScheduledTask = sequelize.define(

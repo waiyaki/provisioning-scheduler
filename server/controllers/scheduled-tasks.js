@@ -4,7 +4,41 @@ const merge = require('lodash/merge');
 const { ScheduledTask, User } = require('../models');
 const { handleErrors } = require('../utils');
 
-function findAndPopulate({
+/**
+ * Construct a `where` clause that restricts access to the owner of the
+ * resource but allows access to admins.
+ *
+ * @method restrictToOwnerOrAdmin
+ * @param  {Object} {user} Request object with currently logged in user object.
+ * @return {Object} An empty object is user is admin else an object with a
+ * `where` clause restricting access to the owner of the resource.
+ */
+const restrictToOwnerOrAdmin = ({ user }) => user.isAdmin && {} || {
+  where: {
+    userId: user.id
+  }
+};
+
+/**
+ * Given a source model and a related model, find resources in the sourceModel
+ * and include the related fields from the related model based on conditions
+ * given in the provided parameters
+ *
+ *
+ * @method findAndPopulate
+ * @param  {Object} [{ user={} } = {}] Optional user object.
+ * @param  {Object} [sourceModel=ScheduledTask] The sourceModel
+ * @param  {String} [whichFind='findOne'] The find operation to run on the source model.
+ * @param  {String} [field='id'] If we are finding a single resource,
+ * constrain the search using this field.
+ * @param  {String} value Value of `field`
+ * @param  {Object} [includeModel=User] Related model to include in the query.
+ * @param  {String} [as='user'] Key under which to include results from includeModel.
+ * @param  {Object} [q={}] Query to run against the database.
+ * @param  {Object} attributes Attributes to include/exclude from the results.
+ * @return {Promise} Promise results object.
+ */
+function findAndPopulate({ user = {} } = {}, {
   sourceModel = ScheduledTask,
   whichFind = 'findOne',
   field = 'id',
@@ -36,7 +70,10 @@ function findAndPopulate({
     attrs = { exclude: ['password'] };
   }
 
-  let query = merge({}, q, {
+  let query = merge({}, q, restrictToOwnerOrAdmin({ user }), {
+    attributes: {
+      exclude: user.isAdmin && [] || ['doneBy', 'status']
+    },
     include: {
       model: includeModel,
       as,
@@ -44,6 +81,7 @@ function findAndPopulate({
     }
   });
 
+  // If we're only finding one thing, add the value constraint to `where`.
   if (whichFind === 'findOne') {
     if (q.where) {
       query = merge({}, query, q, {
@@ -73,7 +111,7 @@ function create(req, res) {
       scheduledTask => {
         const scheduledTaskJSON = scheduledTask.toJSON();
         logger.info('Created scheduledTask: ', scheduledTaskJSON);
-        return findAndPopulate({ value: scheduledTask.id })
+        return findAndPopulate(req, { value: scheduledTask.id })
           .then(
             task => res.status(201).send(task.toJSON()),
             error => {
@@ -99,15 +137,14 @@ function create(req, res) {
 function list(req, res) {
   const today = new Date(new Date().toISOString().replace(/T.*/, ''));
   const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-  return findAndPopulate({
+  return findAndPopulate(req, {
     whichFind: 'findAll',
     q: {
       where: {
         createdAt: {
           $lt: tomorrow,
           $gt: today
-        },
-        userId: req.user.id
+        }
       },
       order: '"createdAt" DESC'
     }
@@ -123,13 +160,8 @@ function list(req, res) {
 
 function retrieve(req, res) {
   const { taskId } = req.params;
-  return findAndPopulate({
-    value: taskId,
-    q: {
-      where: {
-        userId: req.user.id
-      }
-    }
+  return findAndPopulate(req, {
+    value: taskId
   })
   .then(task => {
     if (!task) {
@@ -148,13 +180,8 @@ function retrieve(req, res) {
 function update(req, res) {
   const { taskId } = req.params;
 
-  return findAndPopulate({
-    value: taskId,
-    q: {
-      where: {
-        userId: req.user.id
-      }
-    }
+  return findAndPopulate(req, {
+    value: taskId
   })
   .then(task => {
     if (!task) {

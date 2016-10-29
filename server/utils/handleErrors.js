@@ -16,9 +16,12 @@ module.exports = {
       'SequelizeValidationError',
       'SequelizeUniqueConstraintError'
     ];
+    let errors = {
+      error: 'A server error occured.'
+    };
 
     if (validationErrors.indexOf(error.name) !== -1) {
-      const errors = error.errors
+      errors = error.errors
         .map(err => ({ [err.path]: err.message }))
         .reduce((obj, element) => {
           Object.keys(element).forEach(key => {
@@ -27,14 +30,15 @@ module.exports = {
           });
           return obj;
         }, {});
-
-      return this.send(res, errors, status);
+    } else if (error.name === 'SequelizeDatabaseError') {
+      if (/input syntax/.test(error.message)) {
+        errors = {
+          message: error.message
+        };
+      }
+    } else {
+      status = 500; // eslint-disable-line no-param-reassign
     }
-
-    // TODO: Need better error handling for other errors. This swallows the
-    // original error. 😕 -- Could use logging here though.
-    return this.send(res, {
-      error: 'A server error occured.'
-    }, 500);
+    return this.send(res, errors, status);
   }
 };
