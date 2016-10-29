@@ -3,11 +3,13 @@ import { reducer as form } from 'redux-form';
 
 import auth from './auth';
 import tasks from './tasks';
+import admin from './admin';
 import { removeAuthToken } from '../../utils';
 
 const INITIAL_STATE = {
   tasks: tasks(undefined, {}),
-  auth: auth(undefined, {})
+  auth: auth(undefined, {}),
+  admin: admin(undefined, {})
 };
 
 // Action types that cause an effect in more than a single piece of state.
@@ -22,7 +24,8 @@ export function reducer(state = INITIAL_STATE, action) {
     default:
       return {
         tasks: tasks(state.tasks, action),
-        auth: auth(state.auth, action)
+        auth: auth(state.auth, action),
+        admin: admin(state.admin, action)
       };
   }
 }

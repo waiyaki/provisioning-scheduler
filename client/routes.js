@@ -9,7 +9,7 @@ import {
   EditTask
 } from './containers';
 import { SchedulerActions, CreateTask, Scheduler } from './components';
-import Admin from './components/admin';
+import Admin from './components/Admin';
 
 import { selectors as authSelectors } from './redux/modules/auth';
 
@@ -27,10 +27,9 @@ const requireAuth = store => (nextState, replace) => {
 
 const requireAdmin = store => (nextState, replace) => {
   const state = store.getState();
-  const { isAuthenticated } = getAuth(state);
   const user = getUser(state);
 
-  if (!(isAuthenticated && user && user.isAdmin)) {
+  if (!(user && user.isAdmin)) {
     replace('/welcome');
   }
 };
@@ -47,7 +46,11 @@ const Routes = ({ store }) => (
             <Route component={TaskDetailsContainer} path='/tasks/:taskId' />
             <Route component={EditTask} path='/tasks/:taskId/edit' />
           </Route>
-          <Route component={Admin} path='/admin' onEnter={requireAdmin(store)} />
+          <Route
+            component={Admin}
+            path='/dashboard'
+            onEnter={requireAdmin(store)}
+          />
         </Route>
         <Route path='/login' component={LoginContainer} />
         <Route path='/register' component={RegisterContainer} />

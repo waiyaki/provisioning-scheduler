@@ -21,7 +21,7 @@ const AppHeader = ({ auth, logout, toggleDrawer, navigate }) => (
   <AppBar
     className={styles.appHeader}
     title={
-      <Link to='/' className={styles['link-header']}>
+      <Link to='/tasks' className={styles['link-header']}>
         Provisioning Scheduler
       </Link>
     }
@@ -35,7 +35,7 @@ const AppHeader = ({ auth, logout, toggleDrawer, navigate }) => (
         {auth.user && auth.user.isAdmin && (
           <MenuItem
             primaryText='Admin Dashboard'
-            onTouchTap={() => navigate('/admin/', false)}
+            onTouchTap={() => navigate('/dashboard/', false)}
           />
         )}
         <MenuItem primaryText='Sign out' onTouchTap={logout} />
