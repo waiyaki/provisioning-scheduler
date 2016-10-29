@@ -1,5 +1,6 @@
 const logger = require('logfilename')(__filename);
 const merge = require('lodash/merge');
+const moment = require('moment');
 
 const { ScheduledTask, User } = require('../models');
 const { handleErrors } = require('../utils');
@@ -135,15 +136,15 @@ function create(req, res) {
 }
 
 function list(req, res) {
-  const today = new Date(new Date().toISOString().replace(/T.*/, ''));
-  const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+  const today = moment('00.00', 'HH:mm');
+  const tomorrow = moment(today).add(1, 'days');
   return findAndPopulate(req, {
     whichFind: 'findAll',
     q: {
       where: {
         createdAt: {
-          $lt: tomorrow,
-          $gt: today
+          $lt: tomorrow.toDate(),
+          $gt: today.toDate()
         }
       },
       order: '"createdAt" DESC'
