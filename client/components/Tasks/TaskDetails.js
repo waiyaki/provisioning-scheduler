@@ -1,29 +1,19 @@
 import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
-import { compose, pickBy, omit, is, keys as toKeys } from 'ramda';
+import isEmpty from 'lodash/isEmpty';
+import { omit } from 'ramda';
 
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
-import { decamelizeAndTitleCase } from '../../utils';
 import styles from './styles.css';
+import { halves, transformTask } from './task-details-helpers';
+import { decamelizeAndTitleCase } from '../../utils';
 
-const intoHalves = xs => ({
-  firstHalf: xs.slice(0, xs.length / 2 + 1),
-  secondHalf: xs.slice(xs.length / 2 + 1)
-});
-
-const halves = compose(
-  intoHalves,
-  toKeys,
-  pickBy(is(String)),
-  omit(['createdAt', 'time', 'updatedAt'])
-);
-
-const renderHalf = (task, half) => half.map(key => (
+export const renderHalf = (task, half) => half.map(key => (
   <ListItem
     disabled
     primaryText={decamelizeAndTitleCase(key)}
@@ -32,7 +22,7 @@ const renderHalf = (task, half) => half.map(key => (
   />
 ));
 
-const renderTime = time => (
+export const renderTime = time => (
   <ListItem
     disabled
     primaryText='Time'
@@ -40,23 +30,27 @@ const renderTime = time => (
   />
 );
 
-const TaskDetails = ({ task = {} }) => {
-  const keys = halves(task);
+const TaskDetails = ({ task = {}, exclude = [], transforms = [] }) => {
+  let taskToRender = omit(['time', ...exclude], task);
+  if (!isEmpty(taskToRender)) {
+    taskToRender = transformTask(transforms, taskToRender);
+  }
+  const keys = halves(taskToRender);
   return (
     <Card>
       <CardTitle
         className='text-center'
-        title={task.activity}
+        title={taskToRender.activity}
       />
       <Divider />
       <CardText>
         <List>
           <div className='row'>
             <div className='col-xs-12 col-md-6'>
-              {renderHalf(task, keys.firstHalf)}
+              {renderHalf(taskToRender, keys.firstHalf)}
             </div>
             <div className='col-xs-12 col-md-6'>
-              {renderHalf(task, keys.secondHalf)}
+              {renderHalf(taskToRender, keys.secondHalf)}
               {renderTime(task.time)}
             </div>
           </div>
@@ -74,7 +68,12 @@ const TaskDetails = ({ task = {} }) => {
 };
 
 TaskDetails.propTypes = {
-  task: PropTypes.object
+  task: PropTypes.object,
+  exclude: PropTypes.array,
+  transforms: PropTypes.arrayOf(PropTypes.shape({
+    fields: PropTypes.array.isRequired,
+    renderAs: PropTypes.func.isRequired
+  }))
 };
 
 export default TaskDetails;

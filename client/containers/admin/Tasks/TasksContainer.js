@@ -5,11 +5,10 @@ import R from 'ramda';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import { TasksTable, TasksDialog } from '../../../components/admin';
-import { getComponent } from '../../../utils';
-import { selectors as taskSelectors } from '../../../redux/modules/tasks';
 import {
-  toLocaleTimeString, toLocaleDateString, replaceUserWithNames
-} from './utils';
+  getComponent, toLocaleTimeString, toLocaleDateString, replaceUserWithNames
+} from '../../../utils';
+import { selectors as taskSelectors } from '../../../redux/modules/tasks';
 
 const { getItems, getTasks } = taskSelectors;
 

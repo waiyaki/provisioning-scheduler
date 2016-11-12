@@ -18,13 +18,21 @@ class TaskDetailsContainer extends Component {
 
   render() {
     const { task, isFetching, tasks } = this.props;
+    const transforms = [{
+      fields: ['createdAt', 'updatedAt'],
+      renderAs: dateString => {
+        const date = new Date(dateString);
+        return `${date.toLocaleDateString()}, ${date.toLocaleTimeString()}`;
+      }
+    }];
+
     return getComponent(
       <div className='text-center'>
         <CircularProgress />
       </div>,
       getComponent(
         <FetchTaskError error={tasks.error} />,
-        <TaskDetails task={task} />,
+        <TaskDetails task={task} transforms={transforms} />,
         [tasks.error && tasks.error.taskFetchError]
       ),
       [isFetching]

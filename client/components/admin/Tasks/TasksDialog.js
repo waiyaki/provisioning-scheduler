@@ -26,6 +26,17 @@ const TasksDialog = ({ items, selectedRows, deselectRows }) => {
     maxWidth: 'none'
   };
 
+  const transforms = [{
+    fields: ['createdAt', 'updatedAt'],
+    renderAs: dateString => {
+      const date = new Date(dateString);
+      return `${date.toLocaleDateString()}, ${date.toLocaleTimeString()}`;
+    }
+  }, {
+    fields: ['user'],
+    renderAs: R.compose(R.join(' '), R.props(['firstName', 'lastName']))
+  }];
+
   return (
     <Dialog
       actions={actions}
@@ -34,7 +45,10 @@ const TasksDialog = ({ items, selectedRows, deselectRows }) => {
       modal
       open={!!selectedRows.length}
     >
-      <TaskDetails task={items[R.head(selectedRows)]} />
+      <TaskDetails
+        task={items[R.head(selectedRows)]}
+        transforms={transforms}
+      />
     </Dialog>
   );
 };
