@@ -9,9 +9,16 @@ import Paper from 'material-ui/Paper';
 import { decamelizeAndTitleCase } from '../../../utils';
 import styles from './styles.css';
 
-const TasksTable = ({ fields, items }) => (
+const inlineStyles = {
+  tdNoTasks: {
+    fontSize: '1em',
+    textAlign: 'center'
+  }
+};
+
+const TasksTable = ({ fields, items, onRowSelection, selectedRows }) => (
   <Paper>
-    <Table selectable={false}>
+    <Table onRowSelection={onRowSelection}>
       <TableHeader>
         <TableRow>
           {fields.map(field => (
@@ -21,14 +28,20 @@ const TasksTable = ({ fields, items }) => (
           ))}
         </TableRow>
       </TableHeader>
-      <TableBody showRowHover>
-        {items.map(task => (
-          <TableRow key={task.id}>
+      <TableBody showRowHover deselectOnClickaway={false}>
+        {items.length && items.map((task, index) => (
+          <TableRow key={task.id} selected={selectedRows.includes(index)}>
             {fields.map(field => (
               <TableRowColumn key={field}>{task[field]}</TableRowColumn>
             ))}
           </TableRow>
-        ))}
+        )) || (
+          <TableRow>
+            <TableRowColumn colSpan={fields.length} style={inlineStyles.tdNoTasks}>
+              There are no tasks for selected time range.
+            </TableRowColumn>
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   </Paper>
@@ -36,7 +49,9 @@ const TasksTable = ({ fields, items }) => (
 
 TasksTable.propTypes = {
   fields: PropTypes.array.isRequired,
-  items: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired,
+  onRowSelection: PropTypes.func.isRequired,
+  selectedRows: PropTypes.array.isRequired
 };
 
 export default TasksTable;

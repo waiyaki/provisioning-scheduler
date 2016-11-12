@@ -4,7 +4,7 @@ import R from 'ramda';
 
 import CircularProgress from 'material-ui/CircularProgress';
 
-import { TasksTable } from '../../../components/admin';
+import { TasksTable, TasksDialog } from '../../../components/admin';
 import { getComponent } from '../../../utils';
 import { selectors as taskSelectors } from '../../../redux/modules/tasks';
 import {
@@ -14,6 +14,29 @@ import {
 const { getItems, getTasks } = taskSelectors;
 
 class TasksContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedRows: []
+    };
+
+    this.onRowSelection = this.onRowSelection.bind(this);
+    this.deselectRows = this.deselectRows.bind(this);
+  }
+
+  onRowSelection(selectedRows) {
+    this.setState({
+      selectedRows
+    });
+  }
+
+  deselectRows() {
+    this.setState({
+      selectedRows: []
+    });
+  }
+
   render() {
     const { tasks, items } = this.props;
     const fieldsToDisplay = [
@@ -21,11 +44,34 @@ class TasksContainer extends Component {
       'activity', 'medium', 'time', 'createdAt', 'user', 'status'
     ];
 
+    const replaceUserAndConvertTimes = R.compose(
+      toLocaleTimeString('time'),
+      toLocaleDateString('createdAt'),
+      replaceUserWithNames
+    );
+    const itemsToTabulate = R.map(replaceUserAndConvertTimes, items);
+
     return getComponent(
       <div className='text-center'>
         <CircularProgress />
       </div>,
-      <TasksTable {...{ fields: fieldsToDisplay, items }} />,
+      <div>
+        <TasksTable
+          {...{
+            fields: fieldsToDisplay,
+            items: itemsToTabulate,
+            selectedRows: this.state.selectedRows,
+            onRowSelection: this.onRowSelection
+          }}
+        />
+        <TasksDialog
+          {...{
+            items,
+            selectedRows: this.state.selectedRows,
+            deselectRows: this.deselectRows
+          }}
+        />
+      </div>,
       [tasks.isFetching]
     );
   }
@@ -39,12 +85,6 @@ TasksContainer.propTypes = {
 export default connect(
   state => ({
     tasks: getTasks(state),
-    items: R.map(R.compose(
-        toLocaleTimeString('time'),
-        toLocaleDateString('createdAt'),
-        replaceUserWithNames
-      ),
-      getItems(state)
-    )
+    items: getItems(state)
   })
 )(TasksContainer);
