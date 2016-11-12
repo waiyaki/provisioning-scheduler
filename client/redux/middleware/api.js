@@ -1,7 +1,8 @@
 import curry from 'lodash/fp/curry';
 import Axios from 'axios';
 
-import { getAuthToken } from '../../utils';
+import { getAuthToken, removeAuthToken } from '../../utils';
+import { LOGOUT } from '../modules/reducer';
 
 // Performance hit? 😕
 const getAxiosInstance = auth => (auth
@@ -58,11 +59,18 @@ export default function callApiMiddleware({ dispatch, getState }) {
           payload: response.data,
           type: SUCCESS
         }),
-        error => dispatch({
-          ...payload,
-          error: error.response.data || error.message || 'Something bad happened.',
-          type: FAILURE
-        })
+        error => {
+          let type = FAILURE;
+          if ([401, 403].includes(error.response.status)) {
+            removeAuthToken();
+            type = LOGOUT;
+          }
+          dispatch({
+            ...payload,
+            error: error.response.data || error.message || 'Something bad happened.',
+            type
+          });
+        }
       )
       .catch(error => dispatch({
         ...payload,

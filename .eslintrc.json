@@ -24,6 +24,7 @@
     "no-shadow": [
       "error",
       { "hoist": "never" }
-    ]
+    ],
+    "import/named": ["error"]
   }
 }

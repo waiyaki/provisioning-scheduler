@@ -13,7 +13,7 @@ const INITIAL_STATE = {
 };
 
 // Action types that cause an effect in more than a single piece of state.
-const LOGOUT = 'scheduler/LOGOUT';
+export const LOGOUT = 'scheduler/LOGOUT';
 
 // Reducer that handles combined state.
 export function reducer(state = INITIAL_STATE, action) {
