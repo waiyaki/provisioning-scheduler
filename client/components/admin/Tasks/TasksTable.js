@@ -28,7 +28,7 @@ const TasksTable = ({ fields, items, onRowSelection, selectedRows }) => (
           ))}
         </TableRow>
       </TableHeader>
-      <TableBody showRowHover deselectOnClickaway={false}>
+      <TableBody showRowHover displayRowCheckbox={!!items.length} deselectOnClickaway={false}>
         {items.length && items.map((task, index) => (
           <TableRow key={task.id} selected={selectedRows.includes(index)}>
             {fields.map(field => (
@@ -36,7 +36,7 @@ const TasksTable = ({ fields, items, onRowSelection, selectedRows }) => (
             ))}
           </TableRow>
         )) || (
-          <TableRow>
+          <TableRow selectable={false}>
             <TableRowColumn colSpan={fields.length} style={inlineStyles.tdNoTasks}>
               There are no tasks for selected time range.
             </TableRowColumn>

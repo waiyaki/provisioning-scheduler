@@ -3,14 +3,14 @@ import { browserHistory, Router, Route, IndexRedirect } from 'react-router';
 import { Provider } from 'react-redux';
 
 import App from './App';
+import { SchedulerActions, CreateTask, Scheduler } from './components';
 import {
   SchedulerContainer, LoginContainer, RegisterContainer,
   VerifyAccountContainer, LandingPageContainer, TaskDetailsContainer,
   EditTask
 } from './containers';
-import { SchedulerActions, CreateTask, Scheduler } from './components';
 import {
-  AdminPageContainer, TasksContainer
+  AdminPageContainer, TasksContainer, TaskDetailsDialog
 } from './containers/admin';
 
 import { selectors as authSelectors } from './redux/modules/auth';
@@ -53,6 +53,7 @@ const Routes = ({ store }) => (
             onEnter={requireAdmin(store)}
           >
             <Route component={TasksContainer} path='/dashboard' />
+            <Route component={TaskDetailsDialog} path='/dashboard/tasks/:id' />
           </Route>
         </Route>
         <Route path='/login' component={LoginContainer} />
