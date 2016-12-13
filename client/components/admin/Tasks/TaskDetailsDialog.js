@@ -1,10 +1,16 @@
 import React, { PropTypes } from 'react';
+import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
 import R from 'ramda';
 
 import TaskDetails from '../../Tasks/TaskDetails';
 import TasksDialog from './TasksDialog';
 
-const TaskDetailsDialog = ({ deselectRows, items, selectedRows }) => {
+import { selectors } from '../../../redux/modules/tasks';
+
+const { getItemById } = selectors;
+
+const TaskDetailsDialog = ({ task }) => {
   const transforms = [{
     fields: ['createdAt', 'updatedAt'],
     renderAs: dateString => {
@@ -16,10 +22,8 @@ const TaskDetailsDialog = ({ deselectRows, items, selectedRows }) => {
     renderAs: R.compose(R.join(' '), R.props(['firstName', 'lastName']))
   }];
 
-  const task = items[R.head(selectedRows)];
-
   return (
-    <TasksDialog onCancel={deselectRows} selectedRows={selectedRows}>
+    <TasksDialog onCancel={() => browserHistory.push('/dashboard')}>
       <TaskDetails
         {...{
           task,
@@ -31,9 +35,15 @@ const TaskDetailsDialog = ({ deselectRows, items, selectedRows }) => {
 };
 
 TaskDetailsDialog.propTypes = {
-  deselectRows: PropTypes.func.isRequired,
-  items: PropTypes.array.isRequired,
-  selectedRows: PropTypes.array.isRequired
+  task: PropTypes.object.isRequired
 };
 
-export default TaskDetailsDialog;
+export default connect(
+  (state, ownProps) => {
+    console.log('ownProps: ', ownProps);
+    const { params: { id } } = ownProps;
+    return {
+      task: getItemById(id, state)
+    };
+  }
+)(TaskDetailsDialog);

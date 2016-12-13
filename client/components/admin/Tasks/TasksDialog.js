@@ -3,8 +3,7 @@ import React, { PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-const TasksDialog = ({ children, onCancel, ...rest }) => {
-  const { selectedRows } = rest;
+const TasksDialog = ({ children, onCancel }) => {
   const actions = [
     <FlatButton
       label='Dismiss'
@@ -24,16 +23,15 @@ const TasksDialog = ({ children, onCancel, ...rest }) => {
       autoScrollBodyContent
       contentStyle={contentStyle}
       onRequestClose={onCancel}
-      open={!!selectedRows.length}
+      open
     >
-      {React.cloneElement(children, ...rest)}
+      {children}
     </Dialog>
   );
 };
 
 TasksDialog.propTypes = {
   children: PropTypes.element.isRequired,
-  selectedRows: PropTypes.array.isRequired,
   onCancel: PropTypes.func.isRequired
 };
 

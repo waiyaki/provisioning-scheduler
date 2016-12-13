@@ -9,8 +9,10 @@ import {
   VerifyAccountContainer, LandingPageContainer, TaskDetailsContainer,
   EditTask
 } from './containers';
+
+import { TaskDetailsDialog } from './components/admin';
 import {
-  AdminPageContainer, TasksContainer, TaskDetailsDialog
+  AdminPageContainer, TasksContainer
 } from './containers/admin';
 
 import { selectors as authSelectors } from './redux/modules/auth';
@@ -52,8 +54,10 @@ const Routes = ({ store }) => (
             component={AdminPageContainer}
             onEnter={requireAdmin(store)}
           >
-            <Route component={TasksContainer} path='/dashboard' />
-            <Route component={TaskDetailsDialog} path='/dashboard/tasks/:id' />
+            <Route component={TasksContainer} path='/dashboard'>
+              <Route component={TaskDetailsDialog} path='tasks/:id' />
+            </Route>
+
           </Route>
         </Route>
         <Route path='/login' component={LoginContainer} />
