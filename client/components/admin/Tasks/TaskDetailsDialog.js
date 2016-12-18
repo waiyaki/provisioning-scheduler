@@ -10,7 +10,7 @@ import { selectors } from '../../../redux/modules/tasks';
 
 const { getItemById } = selectors;
 
-const TaskDetailsDialog = ({ task }) => {
+const TaskDetailsDialog = ({ task, onCancel }) => {
   const transforms = [{
     fields: ['createdAt', 'updatedAt'],
     renderAs: dateString => {
@@ -23,7 +23,7 @@ const TaskDetailsDialog = ({ task }) => {
   }];
 
   return (
-    <TasksDialog onCancel={() => browserHistory.push('/dashboard')}>
+    <TasksDialog onCancel={onCancel}>
       <TaskDetails
         {...{
           task,
@@ -35,15 +35,22 @@ const TaskDetailsDialog = ({ task }) => {
 };
 
 TaskDetailsDialog.propTypes = {
-  task: PropTypes.object.isRequired
+  task: PropTypes.object.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onDismiss: PropTypes.func
 };
 
 export default connect(
   (state, ownProps) => {
-    console.log('ownProps: ', ownProps);
     const { params: { id } } = ownProps;
     return {
       task: getItemById(id, state)
     };
-  }
+  },
+  (_, { onDismiss = f => f }) => ({
+    onCancel: () => {
+      onDismiss();
+      browserHistory.push('/dashboard');
+    }
+  })
 )(TaskDetailsDialog);

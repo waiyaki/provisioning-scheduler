@@ -61,7 +61,6 @@ class TasksContainer extends React.Component {
 
     const itemsToTabulate = R.map(replaceUserAndConvertTimes, items);
 
-    console.log('selectedRows: ', this.state.selectedRows);
     return getComponent(
       <div className='text-center'>
         <CircularProgress />
@@ -75,7 +74,9 @@ class TasksContainer extends React.Component {
             onRowSelection: (rows) => this.onRowSelection(rows, true)
           }}
         />
-        {children}
+        {children && React.cloneElement(children, {
+          onDismiss: this.deselectRows
+        })}
       </div>,
       [tasks.isFetching]
     );
