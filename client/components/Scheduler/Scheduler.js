@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
+import R from 'ramda';
 
 import Divider from 'material-ui/Divider';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -9,7 +10,9 @@ import RecentTasks from '../Tasks/RecentTasks';
 
 import styles from './styles.css';
 
-const Scheduler = (props) => (
+const isAtHome = R.compose(R.not, R.isEmpty, R.match(/\/tasks\/?$/));
+
+const Scheduler = ({ children, location: { pathname } }) => (
   <div className='row'>
     <div className='col-xs-12 col-lg-10 col-lg-offset-1'>
       <div className={`${styles['hide-xs']}`}>
@@ -20,9 +23,9 @@ const Scheduler = (props) => (
       </div>
       <div className={`row ${styles.content}`}>
         <div
-          className={`col-xs-12 col-sm-6 col-md-4 ${!props.isAtHome && styles['hide-xs']}`}
+          className={`col-xs-12 col-sm-6 col-md-4 ${isAtHome(pathname) && styles['hide-xs']}`}
         >
-          <RecentTasks items={props.items} tasks={props.tasks} />
+          <RecentTasks />
           <div className={styles.createFabButton}>
             <FloatingActionButton
               mini
@@ -33,7 +36,7 @@ const Scheduler = (props) => (
           </div>
         </div>
         <div className='col-xs-12 col-sm-6 col-md-8'>
-          {React.cloneElement(props.children, { ...props })}
+          {children}
         </div>
       </div>
     </div>
@@ -41,18 +44,10 @@ const Scheduler = (props) => (
 );
 
 Scheduler.propTypes = {
-  children: PropTypes.node,
-  isAtHome: PropTypes.bool.isRequired,
-  items: PropTypes.array.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  tasks: PropTypes.object.isRequired
-};
-
-Scheduler.defaultProps = {
-  isAtHome: true,
-  items: [],
-  tasks: {},
-  onSubmit() {}
+  children: PropTypes.element.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired
+  })
 };
 
 export default Scheduler;

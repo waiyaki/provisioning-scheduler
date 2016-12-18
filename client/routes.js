@@ -3,11 +3,12 @@ import { browserHistory, Router, Route, IndexRedirect } from 'react-router';
 import { Provider } from 'react-redux';
 
 import App from './App';
-import { SchedulerActions, CreateTask, Scheduler } from './components';
+import {
+  SchedulerActions, CreateTask, Scheduler, TaskDetailsContainer, UpdateTask
+} from './components';
 import {
   SchedulerContainer, LoginContainer, RegisterContainer,
-  VerifyAccountContainer, LandingPageContainer, TaskDetailsContainer,
-  EditTask
+  VerifyAccountContainer, LandingPageContainer
 } from './containers';
 
 import { TaskDetailsDialog } from './components/admin';
@@ -48,7 +49,7 @@ const Routes = ({ store }) => (
             <Route component={SchedulerActions} path='/tasks' />
             <Route component={CreateTask} path='/tasks/create' />
             <Route component={TaskDetailsContainer} path='/tasks/:taskId' />
-            <Route component={EditTask} path='/tasks/:taskId/edit' />
+            <Route component={UpdateTask} path='/tasks/:taskId/edit' />
           </Route>
           <Route
             component={AdminPageContainer}

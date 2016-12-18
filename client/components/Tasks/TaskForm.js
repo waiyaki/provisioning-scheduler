@@ -1,12 +1,15 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import without from 'lodash/without';
 import { Field, reduxForm } from 'redux-form';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import { constructRenderableFields } from '../../utils';
 import { renderFormFields, renderTimePicker, validate } from './formHelpers';
 import styles from './styles.css';
+import { selectors as taskSelectors } from '../../redux/modules/tasks';
 
 const rawFields = [
   'partner',
@@ -79,4 +82,8 @@ TaskForm.propTypes = {
 export default reduxForm({
   form: 'TaskForm',
   validate: validate(without(rawFields, 'engineer', 'engineersPhoneNumber'))
-})(TaskForm);
+})(connect(
+  state => ({
+    tasks: taskSelectors.getTasks(state)
+  })
+)(TaskForm));

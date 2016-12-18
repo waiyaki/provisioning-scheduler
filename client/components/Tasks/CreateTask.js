@@ -1,10 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import TaskForm from '../Tasks/TaskForm';
 
-const CreateTask = ({ onSubmit, tasks }) => (
+import { createTask } from '../../redux/modules/tasks';
+
+const CreateTask = ({ onSubmit }) => (
   <Card>
     <CardTitle
       className='text-center'
@@ -12,14 +16,21 @@ const CreateTask = ({ onSubmit, tasks }) => (
     />
     <Divider />
     <CardText>
-      <TaskForm {...{ onSubmit, tasks }} />
+      <TaskForm onSubmit={onSubmit} />
     </CardText>
   </Card>
 );
 
 CreateTask.propTypes = {
-  onSubmit: React.PropTypes.func,
-  tasks: React.PropTypes.object
+  onSubmit: React.PropTypes.func.isRequired
 };
 
-export default CreateTask;
+export default connect(
+  null,
+  dispatch => ({
+    onSubmit: data => createTask(data)(dispatch)
+      .then(({ data: { id: taskId } }) => {
+        browserHistory.push(`/tasks/${taskId}`);
+      })
+  })
+)(CreateTask);

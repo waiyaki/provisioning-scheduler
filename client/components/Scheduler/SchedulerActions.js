@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
 
 import RaisedButton from 'material-ui/RaisedButton';
 
 import styles from './styles.css';
+import { selectors } from '../../redux/modules/tasks';
 
 const SchedulerActions = ({ items }) => (
   <div className={`row middle-xs text-center ${styles.schedulerActions}`}>
@@ -27,4 +29,8 @@ SchedulerActions.propTypes = {
   items: PropTypes.array
 };
 
-export default SchedulerActions;
+export default connect(
+  state => ({
+    items: selectors.getItems(state)
+  })
+)(SchedulerActions);

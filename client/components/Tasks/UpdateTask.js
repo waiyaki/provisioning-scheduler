@@ -1,10 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
-import TaskForm from '../Tasks/TaskForm';
+import CircularProgress from 'material-ui/CircularProgress';
 
-const UpdateTask = ({ onSubmit, tasks, task = {}, ...rest }) => (
+import TaskForm from './TaskForm';
+import FetchTaskError from './FetchTaskError';
+
+import { updateTask, selectors } from '../../redux/modules/tasks';
+import { getComponent } from '../../utils';
+
+const UpdateTask = ({ onSubmit, task }) => (
   <Card>
     <CardTitle
       className='text-center'
@@ -12,15 +20,46 @@ const UpdateTask = ({ onSubmit, tasks, task = {}, ...rest }) => (
     />
     <Divider />
     <CardText>
-      <TaskForm {...{ onSubmit, tasks, initialValues: task, ...rest }} />
+      <TaskForm {...{ onSubmit, initialValues: task }} />
     </CardText>
   </Card>
 );
 
+const UpdateTaskIfPossible = ({ tasks, task, onSubmit }) =>
+  getComponent(
+    <div className='text-center'>
+      <CircularProgress />
+    </div>,
+    getComponent(
+      <FetchTaskError error={tasks.error} />,
+      <UpdateTask task={task} onSubmit={onSubmit} />,
+      [tasks.error && tasks.error.taskFetchError]
+    ),
+    [tasks.isFetching]
+  );
+
 UpdateTask.propTypes = {
-  onSubmit: React.PropTypes.func,
-  tasks: React.PropTypes.object,
-  task: React.PropTypes.object
+  onSubmit: React.PropTypes.func.isRequired,
+  task: React.PropTypes.object.isRequired
 };
 
-export default UpdateTask;
+UpdateTaskIfPossible.propTypes = {
+  onSubmit: React.PropTypes.func.isRequired,
+  task: React.PropTypes.object.isRequired,
+  tasks: React.PropTypes.object.isRequired
+};
+
+UpdateTaskIfPossible.defaultProps = {
+  task: {}
+};
+
+export default connect(
+  (state, { params: { taskId } }) => ({
+    tasks: selectors.getTasks(state),
+    task: selectors.getItemById(taskId, state)
+  }),
+  dispatch => ({
+    onSubmit: data => updateTask(data)(dispatch)
+      .then(({ data: { id } }) => browserHistory.push(`/tasks/${id}`))
+  })
+)(UpdateTaskIfPossible);

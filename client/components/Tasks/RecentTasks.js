@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import { Card, CardTitle, CardText } from 'material-ui/Card';
@@ -10,6 +11,8 @@ import FetchTasksError from './FetchTasksError';
 import { getComponent } from '../../utils';
 import styles from './styles.css';
 
+import { selectors } from '../../redux/modules/tasks';
+
 const RecentTasks = ({ tasks, items }) => (
   <Card className={classNames({ 'full-height': !!items.length })}>
     <CardTitle
@@ -19,7 +22,7 @@ const RecentTasks = ({ tasks, items }) => (
     <Divider />
     <CardText className={styles.tasks}>
       {getComponent(
-        <Tasks tasks={tasks.items} />,
+        <Tasks tasks={items} />,
         getComponent(
           <div className='text-center'>
             <CircularProgress />
@@ -37,9 +40,16 @@ const RecentTasks = ({ tasks, items }) => (
   </Card>
 );
 
+const { getTasks, getItems } = selectors;
+
 RecentTasks.propTypes = {
   tasks: React.PropTypes.object.isRequired,
   items: React.PropTypes.array.isRequired
 };
 
-export default RecentTasks;
+export default connect(
+  state => ({
+    tasks: getTasks(state),
+    items: getItems(state)
+  })
+)(RecentTasks);
