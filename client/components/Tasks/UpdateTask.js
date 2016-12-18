@@ -50,7 +50,8 @@ UpdateTaskIfPossible.propTypes = {
 };
 
 UpdateTaskIfPossible.defaultProps = {
-  task: {}
+  task: {},
+  params: {}
 };
 
 export default connect(
@@ -58,8 +59,8 @@ export default connect(
     tasks: selectors.getTasks(state),
     task: selectors.getItemById(taskId, state)
   }),
-  dispatch => ({
+  (dispatch, { detailsBaseUrl = '/tasks/' }) => ({
     onSubmit: data => updateTask(data)(dispatch)
-      .then(({ data: { id } }) => browserHistory.push(`/tasks/${id}`))
+      .then(({ data: { id } }) => browserHistory.push(`${detailsBaseUrl}${id}`))
   })
 )(UpdateTaskIfPossible);

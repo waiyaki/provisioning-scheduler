@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
+
 import isEmpty from 'lodash/isEmpty';
 import { omit } from 'ramda';
 
@@ -30,7 +32,12 @@ export const renderTime = time => (
   />
 );
 
-const TaskDetails = ({ task = {}, exclude = [], transforms = [] }) => {
+const TaskDetails = ({
+  goToEdit,
+  task = {},
+  exclude = [],
+  transforms = []
+}) => {
   let taskToRender = omit(['time', ...exclude], task);
   if (!isEmpty(taskToRender)) {
     taskToRender = transformTask(transforms, taskToRender);
@@ -57,7 +64,7 @@ const TaskDetails = ({ task = {}, exclude = [], transforms = [] }) => {
         </List>
         <div className={styles.editButton}>
           <FloatingActionButton
-            onTouchTap={() => browserHistory.push(`/tasks/${task.id}/edit`)}
+            onTouchTap={goToEdit}
           >
             <ModeEdit />
           </FloatingActionButton>
@@ -68,6 +75,7 @@ const TaskDetails = ({ task = {}, exclude = [], transforms = [] }) => {
 };
 
 TaskDetails.propTypes = {
+  goToEdit: PropTypes.func.isRequired,
   task: PropTypes.object,
   exclude: PropTypes.array,
   transforms: PropTypes.arrayOf(PropTypes.shape({
@@ -76,4 +84,13 @@ TaskDetails.propTypes = {
   }))
 };
 
-export default TaskDetails;
+export default connect(
+  null,
+  (_, {
+    task,
+    goToEdit = () => browserHistory.push(`/tasks/${task.id}/edit`)
+  }) => ({
+    task,
+    goToEdit
+  })
+)(TaskDetails);

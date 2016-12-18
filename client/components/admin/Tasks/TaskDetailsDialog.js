@@ -27,7 +27,8 @@ const TaskDetailsDialog = ({ task, onCancel }) => {
       <TaskDetails
         {...{
           task,
-          transforms
+          transforms,
+          goToEdit: () => browserHistory.push(`/dashboard/tasks/${task.id}/edit`)
         }}
       />
     </TasksDialog>
@@ -42,9 +43,9 @@ TaskDetailsDialog.propTypes = {
 
 export default connect(
   (state, ownProps) => {
-    const { params: { id } } = ownProps;
+    const { params: { taskId } } = ownProps;
     return {
-      task: getItemById(id, state)
+      task: getItemById(taskId, state)
     };
   },
   (_, { onDismiss = f => f }) => ({

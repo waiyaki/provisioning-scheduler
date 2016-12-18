@@ -11,7 +11,7 @@ import {
   VerifyAccountContainer, LandingPageContainer
 } from './containers';
 
-import { TaskDetailsDialog } from './components/admin';
+import { TaskDetailsDialog, TaskUpdateDialog } from './components/admin';
 import {
   AdminPageContainer, TasksContainer
 } from './containers/admin';
@@ -56,9 +56,9 @@ const Routes = ({ store }) => (
             onEnter={requireAdmin(store)}
           >
             <Route component={TasksContainer} path='/dashboard'>
-              <Route component={TaskDetailsDialog} path='tasks/:id' />
+              <Route component={TaskDetailsDialog} path='tasks/:taskId' />
+              <Route component={TaskUpdateDialog} path='tasks/:taskId/edit' />
             </Route>
-
           </Route>
         </Route>
         <Route path='/login' component={LoginContainer} />
